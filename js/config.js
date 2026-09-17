@@ -2,9 +2,11 @@ export const CONFIG = {
  cantidadEstrellas: 2000,
   sol: {
     nombre: "El Sol",
-    info: "La estrella en el centro de nuestro sistema solar. Es una esfera gigantesca de plasma caliente que da vida a los planetas.",
+    info: "Lasso - No Pares de Bailar.",
     radio: 2,
-    textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg" 
+    textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg",
+    video: "./assets/lasso-no-pares-de-bailar.mp4",
+    mensajeReverso: "Eres la luz que hace brillar todo mi universo."
   },
   planetas: [
     { nombre: "Mercurio", textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg", radio: 0.3, distancia: 4, velocidad: 0.8, colorFallback: 0x888888, info: "El más pequeño y cercano al Sol." },
@@ -16,8 +18,9 @@ export const CONFIG = {
       distancia: 8.5,
       velocidad: 0.4,
       colorFallback: 0x2b82c9,
-      info: "Nuestro hogar, rebosante de agua y vida.",
-      video: "./assets/lasso-no-pares-de-bailar.mp4"
+      info: "Lasso - No Pares de Bailar ",
+      video: "./assets/lasso-no-pares-de-bailar.mp4",
+      mensajeReverso: "No pares de bailar. Que este universo siempre tenga una canción para nosotros."
     },
     { nombre: "Marte", textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg", radio: 0.4, distancia: 11, velocidad: 0.3, colorFallback: 0xc1440e, info: "El planeta rojo." },
     { nombre: "Júpiter", textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg", radio: 1.5, distancia: 16, velocidad: 0.15, colorFallback: 0xd39c7e, info: "El gigante gaseoso." },

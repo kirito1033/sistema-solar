@@ -44,7 +44,11 @@ const sol = new THREE.Mesh(
   }) 
 );
 // Le pasamos la información de nombre y descripción
-sol.userData = { nombre: CONFIG.sol.nombre, info: CONFIG.sol.info };
+sol.userData = {
+  nombre: CONFIG.sol.nombre,
+  info: CONFIG.sol.info,
+  video: CONFIG.sol.video
+};
 escena.add(sol);
 
 const planetasMeshes = [];
@@ -92,10 +96,11 @@ CONFIG.planetas.forEach(datos => {
 // 3. Controles e Interacción
 const controles = new OrbitControls(camara, renderizador.domElement);
 controles.enableDamping = true;
-controles.maxDistance = 150; // Límite de alejamiento del zoom
+controles.maxDistance = 150;
 
 const raycaster = new THREE.Raycaster();
 const raton = new THREE.Vector2();
+
 const infoPanel = document.getElementById("info-planeta");
 const infoTitulo = document.getElementById("info-titulo");
 const infoDesc = document.getElementById("info-desc");
@@ -103,7 +108,10 @@ const infoVideo = document.getElementById("info-video");
 const botonCerrar = document.getElementById("cerrar-tarjeta");
 
 window.addEventListener("pointerdown", (event) => {
-  // No activar el raycaster al hacer clic dentro de la carta.
+  /*
+    Si el usuario toca dentro de la tarjeta, no ejecutar raycasting.
+    Esto permite usar la X y los controles de video normalmente.
+  */
   if (infoPanel.contains(event.target)) {
     return;
   }
@@ -113,14 +121,30 @@ window.addEventListener("pointerdown", (event) => {
 
   raycaster.setFromCamera(raton, camara);
 
-  const intersecciones = raycaster.intersectObjects(planetasMeshes);
+    const objetosInteractivos = [
+    sol,
+    ...planetasMeshes
+  ];
 
+  const intersecciones =
+    raycaster.intersectObjects(
+      objetosInteractivos,
+      false
+    );
+
+  /*
+    Solo se muestra/cambia la tarjeta cuando realmente se selecciona
+    un planeta. Si pulsas el fondo, NO se oculta ni se detiene el video.
+  */
   if (intersecciones.length > 0) {
     const datosPlaneta = intersecciones[0].object.userData;
     mostrarTarjeta(datosPlaneta);
-  } else {
-    ocultarTarjeta();
   }
+});
+
+botonCerrar.addEventListener("pointerdown", (event) => {
+  event.stopPropagation();
+  ocultarTarjeta();
 });
 
 // 4. Adaptabilidad a la ventana (Responsive)
@@ -130,7 +154,10 @@ window.addEventListener('resize', () => {
   renderizador.setSize(window.innerWidth, window.innerHeight);
 });
 
-botonCerrar.addEventListener("click", ocultarTarjeta);
+botonCerrar.addEventListener("pointerdown", (event) => {
+  event.stopPropagation();
+  ocultarTarjeta();
+});
 
 // 5. Bucle de Animación
 function animar(tiempo) {
@@ -155,7 +182,15 @@ function mostrarTarjeta(datosPlaneta) {
   infoTitulo.textContent = datosPlaneta.nombre;
   infoDesc.textContent = datosPlaneta.info;
 
-  // Elimina el video anterior y libera su reproducción.
+  // Detiene y elimina el video anterior solamente al seleccionar otro planeta.
+  const videoAnterior = infoVideo.querySelector("video");
+
+  if (videoAnterior) {
+    videoAnterior.pause();
+    videoAnterior.removeAttribute("src");
+    videoAnterior.load();
+  }
+
   infoVideo.innerHTML = "";
 
   if (datosPlaneta.video) {
@@ -165,7 +200,16 @@ function mostrarTarjeta(datosPlaneta) {
     video.controls = true;
     video.preload = "metadata";
     video.playsInline = true;
-    video.setAttribute("controlsList", "nodownload");
+
+    // Evita pantalla completa, descarga y reproducción remota
+    // en navegadores que soporten estos controles.
+    video.setAttribute(
+      "controlsList",
+      "nodownload nofullscreen noremoteplayback"
+    );
+
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
 
     infoVideo.appendChild(video);
     infoVideo.hidden = false;
@@ -177,10 +221,17 @@ function mostrarTarjeta(datosPlaneta) {
 }
 
 function ocultarTarjeta() {
-  infoPanel.hidden = true;
+  const videoActivo = infoVideo.querySelector("video");
+
+  if (videoActivo) {
+    videoActivo.pause();
+    videoActivo.removeAttribute("src");
+    videoActivo.load();
+  }
 
   infoVideo.innerHTML = "";
   infoVideo.hidden = true;
+  infoPanel.hidden = true;
 }
 
 

@@ -1,16 +1,28 @@
 :root {
   color-scheme: dark;
-  --superficie: rgba(26, 24, 33, 0.9);
+
+  --superficie: rgba(26, 24, 33, 0.92);
   --texto: #f4ece8;
   --suave: #d0c5d0;
   --acento: #e7a9b5;
   --borde: rgba(175, 142, 159, 0.35);
+
   --t-pequeno: 0.85rem;
   --t-base: 1.1rem;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html,
 body {
+  width: 100%;
+  height: 100%;
   margin: 0;
+}
+
+body {
   overflow: hidden;
   background: #000;
   color: var(--texto);
@@ -18,39 +30,57 @@ body {
 }
 
 #escena {
-  width: 100vw;
-  height: 100vh;
   display: block;
+  width: 100vw;
+  width: 100dvw;
+  height: 100vh;
+  height: 100dvh;
 }
 
 .tarjeta-info {
-  position: absolute;
+  position: fixed;
   top: 24px;
   right: 24px;
-  width: min(360px, calc(100vw - 48px));
+
+  /* Más ancha en pantallas grandes; nunca excede la pantalla. */
+  width: min(560px, calc(100vw - 48px));
+  width: min(560px, calc(100dvw - 48px));
+
   max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 48px);
+  overflow-x: hidden;
   overflow-y: auto;
-  box-sizing: border-box;
+  overscroll-behavior: contain;
+
+  padding: 1rem 1.2rem 1.2rem;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+
   background: var(--superficie);
   backdrop-filter: blur(8px);
-  border: 1px solid var(--borde);
-  padding: 1rem 1.2rem 1.2rem;
-  border-radius: 12px;
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+
   z-index: 10;
   pointer-events: auto;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+}
+
+.tarjeta-info[hidden],
+.contenedor-video[hidden] {
+  display: none;
 }
 
 .tarjeta-info h2 {
-  margin: 0 2rem 0.5rem 0;
-  font-size: 1.25rem;
+  margin: 0 3rem 0.5rem 0;
   color: var(--acento);
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  line-height: 1.2;
 }
 
 .tarjeta-info p {
   margin: 0;
-  font-size: var(--t-pequeno);
   color: var(--suave);
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
   line-height: 1.5;
 }
 
@@ -58,41 +88,153 @@ body {
   position: absolute;
   top: 8px;
   right: 10px;
-  width: 32px;
-  height: 32px;
+
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
   border: 0;
   border-radius: 50%;
+
   background: transparent;
   color: var(--texto);
-  font-size: 1.8rem;
+  font-size: 2rem;
   line-height: 1;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
-.boton-cerrar:hover {
+.boton-cerrar:hover,
+.boton-cerrar:focus-visible {
   background: rgba(255, 255, 255, 0.12);
+  outline: none;
 }
 
 .contenedor-video {
-  margin-top: 1rem;
   width: 100%;
+  margin-top: 1rem;
   aspect-ratio: 16 / 9;
-  border-radius: 8px;
+
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
   background: #000;
 }
 
+.contenedor-video video,
 .contenedor-video iframe {
   display: block;
   width: 100%;
   height: 100%;
   border: 0;
-}
-
-.contenedor-video video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
   background: #000;
 }
+
+/* Evita que el video se deforme si su relación no es 16:9. */
+.contenedor-video video {
+  object-fit: contain;
+}
+
+/* Tabletas y celulares */
+@media (max-width: 768px) {
+  .tarjeta-info {
+    top: auto;
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: 12px;
+
+    width: auto;
+    max-height: min(72vh, 620px);
+    max-height: min(72dvh, 620px);
+
+    padding: 0.9rem;
+    border-radius: 14px;
+  }
+
+  .tarjeta-info h2 {
+    margin-right: 3.2rem;
+    font-size: 1.2rem;
+  }
+
+  .tarjeta-info p {
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .boton-cerrar {
+    top: 6px;
+    right: 7px;
+    width: 42px;
+    height: 42px;
+    font-size: 2.1rem;
+  }
+
+  .contenedor-video {
+    margin-top: 0.8rem;
+    border-radius: 9px;
+  }
+}
+
+/* Celulares pequeños */
+@media (max-width: 380px) {
+  .tarjeta-info {
+    right: 8px;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    left: 8px;
+
+    max-height: 76vh;
+    max-height: 76dvh;
+
+    padding: 0.75rem;
+    border-radius: 12px;
+  }
+
+  .tarjeta-info h2 {
+    font-size: 1.1rem;
+  }
+
+  .tarjeta-info p {
+    font-size: 0.82rem;
+  }
+
+  .contenedor-video {
+    margin-top: 0.7rem;
+    border-radius: 8px;
+  }
+}
+
+/* Pantallas muy bajas, por ejemplo móvil horizontal. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .tarjeta-info {
+    top: 8px;
+    right: 8px;
+    bottom: 8px;
+    left: auto;
+
+    width: min(52vw, 560px);
+    max-height: calc(100dvh - 16px);
+    padding: 0.75rem;
+  }
+
+  .tarjeta-info h2 {
+    margin-bottom: 0.3rem;
+    font-size: 1rem;
+  }
+
+  .tarjeta-info p {
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  .contenedor-video {
+    margin-top: 0.55rem;
+  }
+
+  .boton-cerrar {
+    width: 34px;
+    height: 34px;
+    font-size: 1.7rem;
+  }
+}
+
