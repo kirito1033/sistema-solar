@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sistema Solar</title>
+  <link rel="stylesheet" href="./css/estilos.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- Contenedor a pantalla completa -->
+  <div id="escena"></div>
+
+  <aside id="info-planeta" class="tarjeta-info" hidden>
+    <button id="cerrar-tarjeta" class="boton-cerrar" aria-label="Cerrar tarjeta">
+      ×
+    </button>
+
+    <h2 id="info-titulo"></h2>
+    <p id="info-desc"></p>
+
+    <div id="info-video" class="contenedor-video" hidden></div>
+  </aside>
+
+  <script type="module">
+    import("./js/escena.js").catch(console.error);
+  </script>
+</body>
+</html>
