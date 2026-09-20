@@ -3,7 +3,7 @@ export const CONFIG = {
   texturaRosa: "./assets/rosa.png", // Imagen personalizada local
   sol: {
     nombre: "El Sol",
-    info: "El centro radiante de todo nuestro sistema solar.",
+    info: "Lasso - No Pares de Bailar",
     radio: 2,
     textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg",
     video: "./assets/lasso-no-pares-de-bailar.mp4",
@@ -20,7 +20,8 @@ export const CONFIG = {
       velocidad: 0.8,
       colorFallback: 0x9e9e9e,
       colorTema: "#a0a0a0",
-      info: "El planeta más veloz y cercano al Sol.",
+      info: "Alex Ubago & Amaia Montero - Sin Miedo A Nada.",
+      video: "./assets/alex-ubago-sin-miedo-a-nada.mp4",
       mensajeReverso: "Pequeño pero resistente ante cualquier calor e intensidad."
     },
     {
@@ -31,7 +32,8 @@ export const CONFIG = {
       velocidad: 0.6,
       colorFallback: 0xe3bb76,
       colorTema: "#e8b86d",
-      info: "Brillante, cálido y con una atmósfera densa.",
+      info: "Sin Bandera - Te Vi Venir",
+      video: "./assets/Sin-Bandera-Te-Vi-Venir.mp4",
       mensajeReverso: "Un mundo que resplandece como el lucero más hermoso del cielo."
     },
     {
@@ -42,8 +44,8 @@ export const CONFIG = {
       velocidad: 0.4,
       colorFallback: 0x2b82c9,
       colorTema: "#2e93d8",
-      info: "Lasso - No Pares de Bailar",
-      video: "./assets/lasso-no-pares-de-bailar.mp4",
+      info: "Andrés Cepeda - Un Ratito",
+      video: "./assets/Andrés-Cepeda-Un-Ratito.mp4",
       mensajeReverso: "No pares de bailar. Que este universo siempre tenga una canción para nosotros."
     },
     {
@@ -54,7 +56,8 @@ export const CONFIG = {
       velocidad: 0.3,
       colorFallback: 0xc1440e,
       colorTema: "#e05324",
-      info: "El misterioso planeta rojo y tierra de volcanes.",
+      info: "Chayanne - Dejaría Todo",
+      video: "./assets/Chayanne-Dejaría-Todo.mp4",
       mensajeReverso: "La pasión, el coraje y la fuerza viva en cada rincón."
     },
     {
@@ -65,7 +68,8 @@ export const CONFIG = {
       velocidad: 0.15,
       colorFallback: 0xd39c7e,
       colorTema: "#d89668",
-      info: "El coloso del sistema solar con su gran tormenta.",
+      info: "Melendi - Destino o Casualidad ft. Ha*Ash",
+      video: "./assets/Melendi-Destino-o-Casualidad.mp4",
       mensajeReverso: "Un corazón inmenso y protector capaz de albergar mundos."
     },
     {
@@ -76,10 +80,9 @@ export const CONFIG = {
       velocidad: 0.1,
       colorFallback: 0xc5ab6e,
       colorTema: "#e2c575",
-      info: "Lasso - No Pares de Bailar",
       video: "./assets/pablo-alborán-por-fin.mp4",
       tieneAnillo: true,
-      info: "Famoso por su majestuoso sistema de anillos.",
+      info: "Pablo Alborán - Por fin.",
       mensajeReverso: "La belleza infinita reside en los anillos de cada promesa."
     },
     {
@@ -90,7 +93,8 @@ export const CONFIG = {
       velocidad: 0.07,
       colorFallback: 0x4dd0e1,
       colorTema: "#4dd0e1",
-      info: "Gigante de hielo con rotación inclinada.",
+      video: "./assets/Ed-Sheeran-Perfect.mp4",
+      info: "Ed Sheeran - Perfect.",
       mensajeReverso: "Girando a tu propio compás, original y auténtico."
     },
     {
@@ -101,7 +105,8 @@ export const CONFIG = {
       velocidad: 0.05,
       colorFallback: 0x3d5afe,
       colorTema: "#4464f2",
-      info: "El mundo de los vientos supersónicos y azul profundo.",
+      info: "New West - Those Eyes.",
+      video: "./assets/New-West-Those-Eyes/mp4",
       mensajeReverso: "Misterioso, calmo y profundo como la inmensidad del océano cósmico."
     }
   ],
@@ -213,14 +218,28 @@ export const CONFIG = {
       titulo: "Love Story",
       artista: "Indila",
       ruta: "./assets/Indila - Love Story.mp3"
-    }
-    /* Agrega aquí más canciones según las descargues en tu carpeta assets/:
+    },
     {
-      titulo: "Nombre Canción 2",
-      artista: "Artista 2",
-      ruta: "./assets/cancion2.mp3"
+      titulo: "Chainsaw Man",
+      artista: "Kensuke Ushio",
+      ruta: "./assets/Chainsaw Man Reze Arc OST - in the pool.mp3"
+    },
+    {
+      titulo: "Luna",
+      artista: "Zoe",
+      ruta: "./assets/Zoe-LunaPiano.mp3"
+    },
+    {
+      titulo: "Desde mi Cielo",
+      artista: "Mago de Oz",
+      ruta: "./assets/DesdemiCielo-MagodeOz.mp3"
+    },
+    {
+      titulo: "Ofelia",
+      artista: "Juan Arenosa",
+      ruta: "./assets/JuanArenosa-Ofelia.mp3"
     }
-    */
+    
   ]
   
 };

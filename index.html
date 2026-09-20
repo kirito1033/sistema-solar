@@ -15,13 +15,59 @@
   </script>
 </head>
 <body>
+   <div id="pantalla-inicio" class="pantalla-inicio">
+      <div class="destellos-fondo-inicio"></div>
+      
+      <!-- Contenedor general que incluye los dos pilares de rosas 3D a los lados -->
+      <div class="escenario-menu-inicio">
+        
+        <!-- Pilar 3D Izquierdo -->
+        <div class="pilar-rosa-lateral pilar-izquierdo">
+          <canvas id="canvas-rosa-izq" class="canvas-rosa-3d" title="Arrastra para girar la rosa"></canvas>
+          <span class="etiqueta-pilar">GIRA LA ROSA</span>
+        </div>
+
+        <!-- Tarjeta Central del Mensaje -->
+        <div class="tarjeta-menu-juego">
+          <div class="badge-mes">
+            <span class="punto-luz"></span>
+            <span>Primer Mes Juntos</span>
+            <span class="punto-luz"></span>
+          </div>
+
+          <h1 class="titulo-juego">Un Universo Contigo</h1>
+          
+          <div class="cuerpo-mensaje-inicio">
+            <p class="parrafo-destacado">
+              Dicen que en el cosmos existen billones de planetas y constelaciones infinitas, pero en todo este inmenso espacio...
+            </p>
+            <p class="parrafo-emotivo">
+              Mi viaje favorito comenzó hace exactamente un mes a tu lado. Gracias por llenar mi universo de luz, risas y momentos inolvidables.
+            </p>
+          </div>
+
+          <div class="zona-boton-start">
+            <button id="btn-comenzar-viaje" class="btn-start-game">
+              <span class="simbolo-start">►</span>
+              <span>INICIAR VIAJE ESPACIAL</span>
+            </button>
+            <span class="hint-start">Pulsa para despegar y encender la música</span>
+          </div>
+        </div>
+
+        <!-- Pilar 3D Derecho -->
+        <div class="pilar-rosa-lateral pilar-derecho">
+          <canvas id="canvas-rosa-der" class="canvas-rosa-3d" title="Arrastra para girar la rosa"></canvas>
+          <span class="etiqueta-pilar">GIRA LA ROSA</span>
+        </div>
+
+      </div>
+    </div>
+
   <!-- Contenedor a pantalla completa -->
   <div id="escena"></div>
 
-  <!-- Botón Flotante de Pantalla Completa (Superior Izquierda) -->
-    <button id="btn-fullscreen" class="btn-fullscreen" aria-label="Alternar pantalla completa" title="Pantalla completa">
-      <span class="icono-fs">⛶</span>
-    </button>
+  
 
   <!-- Reproductor de Música Flotante (Esquina Inferior Izquierda) -->
     <aside id="reproductor-musica" class="reproductor-musica">

@@ -24,7 +24,7 @@ body {
 
 body {
   overflow: hidden;
-  background: #000;
+  background: #020207;
   color: var(--texto);
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
 }
@@ -38,7 +38,270 @@ body {
 }
 
 /* ==================================================
-   REPRODUCTOR DE MÚSICA FLOTANTE (ESQUINA INFERIOR IZQUIERDA)
+   PANTALLA DE INICIO CON PILARES 3D DE ROSAS
+   ================================================== */
+.pantalla-inicio {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  width: 100dvw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  background: radial-gradient(circle at center, rgba(18, 14, 32, 0.96) 0%, rgba(2, 2, 7, 0.99) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  
+  transition: opacity 2.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 2.2s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 2.2s ease;
+}
+
+.pantalla-inicio.animando-salida {
+  opacity: 0;
+  transform: scale(1.18);
+  pointer-events: none;
+}
+
+.pantalla-inicio.oculta {
+  display: none !important;
+}
+
+/* Escenario flexible que aloja los 2 pilares y la tarjeta */
+.escenario-menu-inicio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2rem;
+  width: 100%;
+  max-width: 1200px;
+  padding: 1.5rem;
+}
+
+/* Pilares 3D laterales */
+.pilar-rosa-lateral {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  padding: 1.4rem 1.1rem;
+  background: rgba(26, 20, 38, 0.65);
+  border: 1px solid rgba(255, 180, 215, 0.28);
+  border-radius: 26px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75),
+              0 0 30px rgba(231, 169, 181, 0.15);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.35s ease;
+}
+
+.pilar-rosa-lateral:hover {
+  border-color: rgba(255, 200, 230, 0.55);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.85),
+              0 0 40px rgba(255, 140, 180, 0.3);
+  transform: translateY(-4px);
+}
+
+.canvas-rosa-3d {
+  width: 160px;
+  height: 220px;
+  border-radius: 16px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.canvas-rosa-3d:active {
+  cursor: grabbing;
+}
+
+.etiqueta-pilar {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffccd5;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(255, 140, 180, 0.6);
+}
+
+/* Tarjeta Central */
+.tarjeta-menu-juego {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.6rem 2.8rem;
+  max-width: 580px;
+  flex: 1;
+
+  background: rgba(22, 18, 34, 0.84);
+  border: 1px solid rgba(255, 180, 215, 0.35);
+  border-radius: 32px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9),
+              0 0 45px rgba(231, 169, 181, 0.22),
+              inset 0 0 25px rgba(255, 255, 255, 0.04);
+}
+
+.badge-mes {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.45rem 1.4rem;
+  margin-bottom: 1.2rem;
+
+  border-radius: 50px;
+  background: rgba(255, 140, 180, 0.12);
+  border: 1px solid rgba(255, 190, 215, 0.4);
+  color: #ffe4ea;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(255, 140, 180, 0.6);
+}
+
+.punto-luz {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px #ffffff, 0 0 16px #ff8da1;
+}
+
+.titulo-juego {
+  margin: 0 0 1rem 0;
+  font-size: clamp(2rem, 4.5vw, 3.1rem);
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.9),
+               0 0 45px rgba(231, 169, 181, 0.65);
+}
+
+.cuerpo-mensaje-inicio {
+  margin-bottom: 2rem;
+  max-width: 480px;
+}
+
+.parrafo-destacado {
+  margin: 0 0 0.75rem 0;
+  font-size: clamp(0.98rem, 1.8vw, 1.12rem);
+  color: #fce7ec;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.parrafo-emotivo {
+  margin: 0;
+  font-size: clamp(0.9rem, 1.6vw, 1.02rem);
+  color: var(--suave);
+  line-height: 1.65;
+}
+
+.zona-boton-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.btn-start-game {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 380px;
+  padding: 1.15rem 2.2rem;
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50px;
+  background: linear-gradient(135deg, #ff8fa3 0%, #cf3d75 100%);
+  color: #ffffff;
+
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  cursor: pointer;
+  touch-action: manipulation;
+  box-shadow: 0 10px 35px rgba(207, 61, 117, 0.55),
+              0 0 25px rgba(255, 143, 163, 0.45);
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: pulsoStart 2.5s infinite alternate;
+}
+
+@keyframes pulsoStart {
+  from { box-shadow: 0 8px 30px rgba(207, 61, 117, 0.5), 0 0 15px rgba(255, 143, 163, 0.3); }
+  to { box-shadow: 0 14px 50px rgba(207, 61, 117, 0.85), 0 0 35px rgba(255, 143, 163, 0.7); }
+}
+
+.btn-start-game:hover {
+  transform: translateY(-3px) scale(1.03);
+  filter: brightness(1.12);
+}
+
+.btn-start-game:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.simbolo-start {
+  font-size: 0.95rem;
+}
+
+.hint-start {
+  font-size: 0.82rem;
+  color: #bfaec2;
+  letter-spacing: 0.6px;
+}
+
+/* ==================================================
+   BOTÓN PANTALLA COMPLETA
+   ================================================== */
+.btn-fullscreen {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 15;
+
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+
+  background: rgba(24, 22, 32, 0.85);
+  color: #ffffff;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.btn-fullscreen:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: scale(1.08);
+}
+
+/* ==================================================
+   REPRODUCTOR DE MÚSICA FLOTANTE
    ================================================== */
 .reproductor-musica {
   position: fixed;
@@ -63,12 +326,6 @@ body {
   user-select: none;
 }
 
-.reproductor-musica:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7),
-              0 0 25px rgba(231, 169, 181, 0.25);
-}
-
 .info-musica {
   display: flex;
   align-items: center;
@@ -76,20 +333,20 @@ body {
 }
 
 .icono-disco {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #ffffff;
   display: grid;
   place-items: center;
-  animation: girarDisco 6s linear infinite;
-  animation-play-state: paused;
 }
 
 .reproductor-musica.reproduciendo .icono-disco {
-  animation-play-state: running;
+  animation: pulsoNota 1.6s ease-in-out infinite alternate;
 }
 
-@keyframes girarDisco {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+@keyframes pulsoNota {
+  from { transform: scale(1); filter: drop-shadow(0 0 4px #ffffff); }
+  to { transform: scale(1.25); filter: drop-shadow(0 0 10px #ff8fa3); }
 }
 
 .detalles-pista {
@@ -157,7 +414,7 @@ body {
 }
 
 /* ==================================================
-   PALABRAS FLOTANTES & MODAL DE ROSAS (BLANCO)
+   PALABRAS FLOTANTES & MODAL
    ================================================== */
 #contenedor-palabras-flotantes {
   position: fixed;
@@ -207,7 +464,6 @@ body {
   }
 }
 
-/* Modal en pantalla */
 .modal-palabra {
   position: fixed;
   bottom: 30px;
@@ -238,12 +494,13 @@ body {
   max-width: 90vw;
 }
 
-.icono-rosa-modal {
-  font-size: 2.2rem;
-  display: block;
-  margin-bottom: 0.3rem;
-  color: #ffffff;
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.95));
+.indicador-rosa-modal {
+  width: 8px;
+  height: 8px;
+  margin: 0 auto 0.5rem auto;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px #ffffff, 0 0 20px #ff8da1;
 }
 
 .etiqueta-modal {
@@ -474,7 +731,41 @@ body {
 }
 
 /* Responsive */
+@media (max-width: 992px) {
+  .escenario-menu-inicio {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .pilar-rosa-lateral {
+    display: none; /* En pantallas pequeñas se prioriza la tarjeta central */
+  }
+
+  .tarjeta-menu-juego {
+    padding: 2rem 1.6rem;
+    margin: 1rem;
+    border-radius: 24px;
+  }
+}
+
 @media (max-width: 768px) {
+  .titulo-juego {
+    font-size: 2.1rem;
+  }
+
+  .btn-start-game {
+    padding: 1rem 1.4rem;
+    font-size: 0.95rem;
+  }
+
+  .btn-fullscreen {
+    top: max(14px, env(safe-area-inset-top));
+    left: max(14px, env(safe-area-inset-left));
+    width: 42px;
+    height: 42px;
+    font-size: 1.15rem;
+  }
+
   .tarjeta-info {
     top: auto;
     right: 12px;
@@ -484,8 +775,8 @@ body {
   }
 
   .reproductor-musica {
-    bottom: 12px;
-    left: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: max(12px, env(safe-area-inset-left));
     padding: 0.6rem 0.9rem;
     gap: 8px;
   }
