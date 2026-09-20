@@ -19,31 +19,64 @@ escena.add(new THREE.AmbientLight(0xffffff, 1));
 const luzSolar = new THREE.PointLight(0xffffff, 20, 200);
 escena.add(luzSolar);
 
-// Textura procedural de Rosa Blanca en Canvas
-function crearTexturaRosa() {
+// Textura procedural de Rosa (Emoji 🌹 transformado a Blanco Puro Brillante)
+function crearTexturaRosaBlancaBrillante() {
   const canvas = document.createElement("canvas");
   canvas.width = 128;
   canvas.height = 128;
   const ctx = canvas.getContext("2d");
-  ctx.font = "80px sans-serif";
+
+  // 1. Dibujar el emoji de rosa original en alta definición
+  ctx.font = "88px 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.shadowColor = "#ffffff";
-  ctx.shadowBlur = 15;
-  ctx.fillText("🏶", 64, 64);
+  ctx.fillText("🌹", 64, 64);
 
-  const texture = new THREE.CanvasTexture(canvas);
+  // 2. Extraer los datos de píxeles y convertir todos los píxeles visibles a blanco puro (RGB = 255)
+  const imgData = ctx.getImageData(0, 0, 128, 128);
+  const data = imgData.data;
+
+  for (let i = 0; i < data.length; i += 4) {
+    if (data[i + 3] > 15) { // Si el píxel tiene opacidad
+      data[i] = 255;     // R
+      data[i + 1] = 255; // G
+      data[i + 2] = 255; // B
+      // Reforzar la opacidad para que resalte con intensidad
+      data[i + 3] = Math.min(255, data[i + 3] * 1.25);
+    }
+  }
+
+  // 3. Volver a plasmar la silueta blanca
+  ctx.putImageData(imgData, 0, 0);
+
+  // 4. Crear un segundo canvas para añadir un halo de resplandor estelar
+  const canvasFinal = document.createElement("canvas");
+  canvasFinal.width = 128;
+  canvasFinal.height = 128;
+  const ctxFinal = canvasFinal.getContext("2d");
+
+  // Resplandor exterior blanco y celeste sutil
+  ctxFinal.shadowColor = "#ffffff";
+  ctxFinal.shadowBlur = 22;
+  ctxFinal.drawImage(canvas, 0, 0);
+
+  // Capa de refuerzo de brillo central
+  ctxFinal.shadowColor = "#e6f2ff";
+  ctxFinal.shadowBlur = 10;
+  ctxFinal.drawImage(canvas, 0, 0);
+
+  const texture = new THREE.CanvasTexture(canvasFinal);
   texture.needsUpdate = true;
   return texture;
 }
 
-// 1. Rosas Blancas en lugar de estrellas (Sprites interactivos)
-const texturaRosa = crearTexturaRosa();
+// 1. Rosas Blancas Brillantes en lugar de estrellas
+const texturaRosa = crearTexturaRosaBlancaBrillante();
 const materialRosa = new THREE.SpriteMaterial({
   map: texturaRosa,
   color: 0xffffff,
   transparent: true,
-  opacity: 0.95
+  opacity: 0.98
 });
 
 const grupoRosas = new THREE.Group();
@@ -194,11 +227,11 @@ function obtenerPalabraAleatoria() {
   return lista[indice];
 }
 
-// Efecto visual: Palabra flotando en pantalla
+// Efecto visual: Palabra flotando en pantalla con rosa blanca
 function mostrarPalabraFlotante(palabra, x, y) {
   const elemento = document.createElement("div");
   elemento.className = "palabra-flotante-pop";
-  elemento.textContent = `🏶 ${palabra}`;
+  elemento.textContent = `🌹 ${palabra}`;
   elemento.style.left = `${x}px`;
   elemento.style.top = `${y}px`;
 
@@ -223,7 +256,7 @@ function mostrarModalPalabra(palabra) {
 }
 
 // ==================================================
-// SISTEMA DE REPRODUCCIÓN DE MÚSICA SIN REPETIR & AUTOPLAY
+// SISTEMA DE MÚSICA SIN REPETIR & AUTOPLAY
 // ==================================================
 const audioFondo = new Audio();
 audioFondo.preload = "auto";
@@ -241,7 +274,7 @@ const listaCanciones = CONFIG.canciones && CONFIG.canciones.length > 0
 
 let ordenReproduccion = [];
 let indiceOrdenActual = 0;
-let pausadoPorVideo = false; // Indicador de pausa automática por reproducción de video
+let pausadoPorVideo = false;
 
 function barajarCanciones() {
   ordenReproduccion = Array.from({ length: listaCanciones.length }, (_, i) => i);
@@ -284,18 +317,15 @@ function anteriorCancion() {
   cargarCancion(indiceOrdenActual, !audioFondo.paused);
 }
 
-// Inicializar lista barajada al cargar la página
+// Inicializar lista al cargar la página
 barajarCanciones();
 cargarCancion(0, false);
 
-// Intento de Autoplay inmediato al cargar la página
 function intentarAutoplay() {
   audioFondo.play().then(() => {
     panelMusica.classList.add("reproduciendo");
     btnMusicaPlay.textContent = "⏸";
   }).catch(() => {
-    // Si las políticas estrictas de autoplay del navegador bloquean el audio al inicio,
-    // se iniciará con cualquier primera interacción del usuario
     const iniciarEnInteraccion = () => {
       if (audioFondo.paused && !pausadoPorVideo) {
         audioFondo.play().catch(() => {});
@@ -311,14 +341,13 @@ function intentarAutoplay() {
   });
 }
 
-// Ejecutar intento de reproducción tan pronto se carga el script
 if (document.readyState === "complete" || document.readyState === "interactive") {
   intentarAutoplay();
 } else {
   window.addEventListener("DOMContentLoaded", intentarAutoplay);
 }
 
-// Eventos del reproductor manual
+// Eventos de botones
 btnMusicaPlay.addEventListener("click", (e) => {
   e.stopPropagation();
   if (audioFondo.paused) {
@@ -355,7 +384,7 @@ audioFondo.addEventListener("ended", () => {
 });
 
 // ==================================================
-// INTERACCIÓN CON PLANETAS Y CONTROL CRUZADO AUDIO/VIDEO
+// INTERACCIÓN Y CONTROL VIDEO / AUDIO
 // ==================================================
 window.addEventListener("pointerdown", (event) => {
   if (
@@ -381,7 +410,7 @@ window.addEventListener("pointerdown", (event) => {
     return;
   }
 
-  // 2. Evaluar clics en Rosas Blancas
+  // 2. Evaluar clics en Rosas Blancas Brillantes
   const interRosas = raycaster.intersectObjects(rosasArray, false);
   if (interRosas.length > 0) {
     const rosaClickeada = interRosas[0].object;
@@ -426,7 +455,7 @@ function animar(tiempo) {
 
 renderizador.setAnimationLoop(animar);
 
-// Funciones de control de Tarjeta de Planetas con sincronización de Video y Audio
+// Sincronización de Video y Tarjetas
 function mostrarTarjeta(datosPlaneta) {
   tarjetaInner.classList.remove("girada");
 
@@ -455,7 +484,6 @@ function mostrarTarjeta(datosPlaneta) {
     video.setAttribute("playsinline", "");
     video.setAttribute("webkit-playsinline", "");
 
-    // Sincronización: Al reproducir el video, pausar la música de fondo
     video.addEventListener("play", () => {
       if (!audioFondo.paused) {
         pausadoPorVideo = true;
@@ -463,7 +491,6 @@ function mostrarTarjeta(datosPlaneta) {
       }
     });
 
-    // Sincronización: Al pausar o terminar el video, reanudar la música de fondo si fue pausada por el video
     video.addEventListener("pause", () => {
       if (pausadoPorVideo) {
         pausadoPorVideo = false;
@@ -499,7 +526,6 @@ function ocultarTarjeta() {
   infoPanel.hidden = true;
   tarjetaInner.classList.remove("girada");
 
-  // Reanudar la música de fondo al salir de la tarjeta si estaba pausada por el video
   if (pausadoPorVideo) {
     pausadoPorVideo = false;
     audioFondo.play().catch(() => {});
