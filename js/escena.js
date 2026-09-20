@@ -2,6 +2,9 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { CONFIG } from "./config.js";
 
+// Detección de dispositivo móvil para optimización de rendimiento
+const esMovil = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent) || window.innerWidth < 768;
+
 const contenedor = document.getElementById("escena");
 const escena = new THREE.Scene();
 
@@ -12,8 +15,14 @@ escena.fog = new THREE.FogExp2(0x020208, 0.0028);
 const camara = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 camara.position.set(0, 36, 75);
 
-const renderizador = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderizador.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const renderizador = new THREE.WebGLRenderer({
+  antialias: !esMovil, // Desactivar antialias pesado en móviles para 60 FPS estables
+  alpha: true,
+  powerPreference: "high-performance"
+});
+
+// En celulares limitamos el pixelRatio a 1.5 para ahorrar batería y GPU
+renderizador.setPixelRatio(Math.min(window.devicePixelRatio, esMovil ? 1.5 : 2));
 renderizador.setSize(window.innerWidth, window.innerHeight);
 renderizador.toneMapping = THREE.ACESFilmicToneMapping;
 renderizador.toneMappingExposure = 1.0;
@@ -25,17 +34,17 @@ const luzSolar = new THREE.PointLight(0xffeedd, 3.8, 140);
 escena.add(luzSolar);
 
 // ==================================================
-// 1. NEBULOSAS SUTILES DE FONDO
+// 1. NEBULOSAS SUTILES DE FONDO (OPTIMIZADAS)
 // ==================================================
 function crearTexturaNebulosaSuave(colorCentro, colorBorde) {
   const canvas = document.createElement("canvas");
-  canvas.width = 512;
-  canvas.height = 512;
+  canvas.width = 256; // 256px optimizado para menor consumo de VRAM
+  canvas.height = 256;
   const ctx = canvas.getContext("2d");
 
-  const centroX = 256;
-  const centroY = 256;
-  const radio = 245;
+  const centroX = 128;
+  const centroY = 128;
+  const radio = 120;
 
   const grad = ctx.createRadialGradient(centroX, centroY, 0, centroX, centroY, radio);
   grad.addColorStop(0, colorCentro);
@@ -44,12 +53,13 @@ function crearTexturaNebulosaSuave(colorCentro, colorBorde) {
   grad.addColorStop(1, "rgba(0,0,0,0)");
 
   ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 512, 512);
+  ctx.fillRect(0, 0, 256, 256);
 
-  for (let i = 0; i < 12; i++) {
-    const rx = 140 + Math.random() * 230;
-    const ry = 140 + Math.random() * 230;
-    const rrad = 50 + Math.random() * 90;
+  const numManchas = esMovil ? 6 : 10;
+  for (let i = 0; i < numManchas; i++) {
+    const rx = 70 + Math.random() * 115;
+    const ry = 70 + Math.random() * 115;
+    const rrad = 25 + Math.random() * 45;
     const subGrad = ctx.createRadialGradient(rx, ry, 0, rx, ry, rrad);
     subGrad.addColorStop(0, colorCentro);
     subGrad.addColorStop(1, "rgba(0,0,0,0)");
@@ -73,6 +83,7 @@ const coloresNebulosas = [
   { centro: "rgba(40, 140, 150, 0.17)", borde: "rgba(12, 50, 70, 0.03)" }
 ];
 
+const nubesPorTipo = esMovil ? 3 : 5;
 coloresNebulosas.forEach((paleta) => {
   const textura = crearTexturaNebulosaSuave(paleta.centro, paleta.borde);
   const material = new THREE.SpriteMaterial({
@@ -83,7 +94,7 @@ coloresNebulosas.forEach((paleta) => {
     opacity: 0.35
   });
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < nubesPorTipo; i++) {
     const nube = new THREE.Sprite(material);
     const dist = 58 + Math.random() * 65;
     const angulo = Math.random() * Math.PI * 2;
@@ -157,7 +168,7 @@ escena.add(grupoConstelaciones);
 // 3. POLVO ESTELAR DE FONDO
 // ==================================================
 const geoPolvoEstrellas = new THREE.BufferGeometry();
-const cantPolvo = 900;
+const cantPolvo = esMovil ? 450 : 800;
 const posPolvo = new Float32Array(cantPolvo * 3);
 const coloresPolvo = new Float32Array(cantPolvo * 3);
 
@@ -244,7 +255,7 @@ const materialRosa = new THREE.SpriteMaterial({
 
 const grupoRosas = new THREE.Group();
 const rosasArray = [];
-const numRosas = CONFIG.cantidadEstrellas || 150;
+const numRosas = CONFIG.cantidadEstrellas || (esMovil ? 90 : 150);
 
 for (let i = 0; i < numRosas; i++) {
   const sprite = new THREE.Sprite(materialRosa);
@@ -279,7 +290,7 @@ cargadorTexturas.setCrossOrigin("anonymous");
 // Sol
 const texturaSol = cargadorTexturas.load(CONFIG.sol.textura);
 const sol = new THREE.Mesh(
-  new THREE.SphereGeometry(CONFIG.sol.radio, 32, 32),
+  new THREE.SphereGeometry(CONFIG.sol.radio, esMovil ? 24 : 32, esMovil ? 24 : 32),
   new THREE.MeshBasicMaterial({
     map: texturaSol,
     color: 0xffb338
@@ -304,7 +315,7 @@ const planetasMeshes = [];
 CONFIG.planetas.forEach((datos) => {
   const texturaPlaneta = cargadorTexturas.load(datos.textura);
   const malla = new THREE.Mesh(
-    new THREE.SphereGeometry(datos.radio, 32, 32),
+    new THREE.SphereGeometry(datos.radio, esMovil ? 20 : 32, esMovil ? 20 : 32),
     new THREE.MeshStandardMaterial({
       map: texturaPlaneta,
       color: datos.colorFallback,
@@ -318,7 +329,7 @@ CONFIG.planetas.forEach((datos) => {
 
   // Anillos de Saturno
   if (datos.tieneAnillo) {
-    const geometriaAnillo = new THREE.RingGeometry(datos.radio + 0.3, datos.radio + 1.2, 64);
+    const geometriaAnillo = new THREE.RingGeometry(datos.radio + 0.3, datos.radio + 1.2, esMovil ? 36 : 64);
     const materialAnillo = new THREE.MeshBasicMaterial({
       color: 0xe6dac3,
       side: THREE.DoubleSide,
@@ -330,8 +341,8 @@ CONFIG.planetas.forEach((datos) => {
     malla.add(anillo);
   }
 
-  // Guía de Órbita brillante
-  const geometriaOrbita = new THREE.RingGeometry(datos.distancia - 0.065, datos.distancia + 0.065, 128);
+  // Guía de Órbita
+  const geometriaOrbita = new THREE.RingGeometry(datos.distancia - 0.065, datos.distancia + 0.065, esMovil ? 64 : 128);
   const materialOrbita = new THREE.MeshBasicMaterial({
     color: 0xc8e0ff,
     side: THREE.DoubleSide,
@@ -349,6 +360,7 @@ CONFIG.planetas.forEach((datos) => {
 // ==================================================
 const controles = new OrbitControls(camara, renderizador.domElement);
 controles.enableDamping = true;
+controles.dampingFactor = 0.05;
 controles.maxDistance = 160;
 
 const raycaster = new THREE.Raycaster();
@@ -365,7 +377,6 @@ const btnGirarFrente = document.getElementById("btn-girar-frente");
 const btnGirarAtras = document.getElementById("btn-girar-atras");
 const botonesCerrar = document.querySelectorAll(".btn-cerrar-accion");
 
-// Modal y Contenedor de Palabras Bonitas
 const modalPalabra = document.getElementById("modal-palabra");
 const textoPalabraModal = document.getElementById("texto-palabra-modal");
 const btnCerrarModal = document.getElementById("cerrar-modal-palabra");
@@ -377,7 +388,6 @@ if (btnCerrarModal) {
   });
 }
 
-// Giros de tarjeta
 if (btnGirarFrente) {
   btnGirarFrente.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -392,7 +402,6 @@ if (btnGirarAtras) {
   });
 }
 
-// Botones de cerrar tarjeta
 botonesCerrar.forEach((btn) => {
   btn.addEventListener("pointerdown", (event) => {
     event.stopPropagation();
@@ -591,7 +600,7 @@ audioFondo.addEventListener("ended", () => {
 });
 
 // ==================================================
-// 9. PILARES DE ROSAS ROJAS 3D GIRATORIAS (START SCREEN)
+// 9. PILARES DE ROSAS ROJAS 3D GIRATORIAS
 // ==================================================
 function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
   const canvas = document.getElementById(canvasId);
@@ -601,11 +610,10 @@ function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
   const cameraPilar = new THREE.PerspectiveCamera(40, 160 / 220, 0.1, 100);
   cameraPilar.position.set(0, 0.3, 7.5);
 
-  const rendererPilar = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  rendererPilar.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const rendererPilar = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !esMovil });
+  rendererPilar.setPixelRatio(Math.min(window.devicePixelRatio, esMovil ? 1.5 : 2));
   rendererPilar.setSize(160, 220, false);
 
-  // Iluminación cálida y romántica para resaltar el rojo
   scenePilar.add(new THREE.AmbientLight(0xffffff, 1.2));
   const lightDirect = new THREE.DirectionalLight(colorLuzPilar, 3.2);
   lightDirect.position.set(4, 5, 5);
@@ -615,13 +623,11 @@ function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
   lightPoint.position.set(0, 2, 4);
   scenePilar.add(lightPoint);
 
-  // Modelo 3D de Rosa Roja Aterciopelada
   const grupoRosa3D = new THREE.Group();
 
-  // Núcleo rojo carmesí
-  const geoCentro = new THREE.SphereGeometry(0.5, 20, 20);
+  const geoCentro = new THREE.SphereGeometry(0.5, 16, 16);
   const matCentro = new THREE.MeshStandardMaterial({
-    color: 0x8a031e, // Rojo terciopelo profundo
+    color: 0x8a031e,
     roughness: 0.3,
     metalness: 0.15
   });
@@ -629,36 +635,35 @@ function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
   centroRosa.position.y = 0.5;
   grupoRosa3D.add(centroRosa);
 
-  // Pétalos helicoidales en color rojo pasión degradado
   const matPetalosInternos = new THREE.MeshStandardMaterial({
-    color: 0xc9184a, // Rojo rubí intenso
+    color: 0xc9184a,
     roughness: 0.35,
     metalness: 0.1,
     side: THREE.DoubleSide
   });
 
   const matPetalosExternos = new THREE.MeshStandardMaterial({
-    color: 0xe63946, // Rojo vivo exterior
+    color: 0xe63946,
     roughness: 0.4,
     metalness: 0.08,
     side: THREE.DoubleSide
   });
 
-  const numCapas = 16;
+  const numCapas = esMovil ? 12 : 16;
   for (let i = 0; i < numCapas; i++) {
     const radioCapa = 0.55 + i * 0.08;
     const angulo = i * 2.399;
     const geoPetalo = new THREE.SphereGeometry(
       0.6 + i * 0.04,
-      16,
-      16,
+      12,
+      12,
       0,
       Math.PI * 0.75,
       0,
       Math.PI * 0.65
     );
 
-    const matActual = i < 8 ? matPetalosInternos : matPetalosExternos;
+    const matActual = i < (numCapas / 2) ? matPetalosInternos : matPetalosExternos;
     const petalo = new THREE.Mesh(geoPetalo, matActual);
     petalo.position.set(
       Math.cos(angulo) * radioCapa * 0.45,
@@ -671,15 +676,13 @@ function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
     grupoRosa3D.add(petalo);
   }
 
-  // Tallo verde esmeralda
-  const geoTallo = new THREE.CylinderGeometry(0.1, 0.1, 3.2, 16);
+  const geoTallo = new THREE.CylinderGeometry(0.1, 0.1, 3.2, 12);
   const matTallo = new THREE.MeshStandardMaterial({ color: 0x1b4332, roughness: 0.6 });
   const tallo = new THREE.Mesh(geoTallo, matTallo);
   tallo.position.y = -1.4;
   grupoRosa3D.add(tallo);
 
-  // Hojas verdes
-  const geoHoja = new THREE.ConeGeometry(0.35, 1.1, 12);
+  const geoHoja = new THREE.ConeGeometry(0.35, 1.1, 10);
   const matHoja = new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.5 });
   
   const hoja1 = new THREE.Mesh(geoHoja, matHoja);
@@ -694,7 +697,6 @@ function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
 
   scenePilar.add(grupoRosa3D);
 
-  // Controles de giro interactivo por OrbitControls
   const controlsPilar = new OrbitControls(cameraPilar, canvas);
   controlsPilar.enableDamping = true;
   controlsPilar.enableZoom = false;
@@ -717,9 +719,8 @@ function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
   };
 }
 
-// Inicialización de las Rosas Rojas en los pilares laterales
-const pilarIzq = crearEscenaPilarRosa("canvas-rosa-izq", 0xff758f);
-const pilarDer = crearEscenaPilarRosa("canvas-rosa-der", 0xff4d6d);
+const pilarIzq = !esMovil ? crearEscenaPilarRosa("canvas-rosa-izq", 0xff758f) : null;
+const pilarDer = !esMovil ? crearEscenaPilarRosa("canvas-rosa-der", 0xff4d6d) : null;
 
 // ==================================================
 // 10. ANIMACIÓN CINEMATOGRÁFICA DE ESCAPE (INICIO)
@@ -839,9 +840,10 @@ function animar(tiempo) {
   polvoEstelar.rotation.y = -t * 0.002;
   grupoRosas.rotation.y = t * 0.01;
 
-  // Renderizar los pilares 3D en cada frame
-  if (pilarIzq) pilarIzq.render();
-  if (pilarDer) pilarDer.render();
+  if (pantallaInicio && !pantallaInicio.classList.contains("oculta")) {
+    if (pilarIzq) pilarIzq.render();
+    if (pilarDer) pilarDer.render();
+  }
 
   controles.update();
   renderizador.render(escena, camara);

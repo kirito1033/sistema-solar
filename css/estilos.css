@@ -75,7 +75,6 @@ body {
   display: none !important;
 }
 
-/* Escenario flexible que aloja los 2 pilares y la tarjeta */
 .escenario-menu-inicio {
   display: flex;
   align-items: center;
@@ -86,7 +85,6 @@ body {
   padding: 1.5rem;
 }
 
-/* Pilares 3D laterales */
 .pilar-rosa-lateral {
   display: flex;
   flex-direction: column;
@@ -133,7 +131,6 @@ body {
   text-shadow: 0 0 8px rgba(255, 140, 180, 0.6);
 }
 
-/* Tarjeta Central */
 .tarjeta-menu-juego {
   display: flex;
   flex-direction: column;
@@ -265,7 +262,7 @@ body {
 }
 
 /* ==================================================
-   BOTÓN PANTALLA COMPLETA
+   BOTÓN PANTALLA COMPLETA (SUPERIOR IZQUIERDA)
    ================================================== */
 .btn-fullscreen {
   position: fixed;
@@ -301,7 +298,7 @@ body {
 }
 
 /* ==================================================
-   REPRODUCTOR DE MÚSICA FLOTANTE
+   REPRODUCTOR DE MÚSICA FLOTANTE (ESCRITORIO: ABAJO IZQ)
    ================================================== */
 .reproductor-musica {
   position: fixed;
@@ -324,6 +321,12 @@ body {
 
   transition: all 0.3s ease;
   user-select: none;
+}
+
+.reproductor-musica:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7),
+              0 0 25px rgba(231, 169, 181, 0.25);
 }
 
 .info-musica {
@@ -730,7 +733,9 @@ body {
   margin-top: 0.8rem !important;
 }
 
-/* Responsive */
+/* ==================================================
+   RESPONSIVO MÓVIL Y TABLET (SOLUCIÓN DE SUPERPOSICIÓN)
+   ================================================== */
 @media (max-width: 992px) {
   .escenario-menu-inicio {
     flex-direction: column;
@@ -738,7 +743,7 @@ body {
   }
 
   .pilar-rosa-lateral {
-    display: none; /* En pantallas pequeñas se prioriza la tarjeta central */
+    display: none;
   }
 
   .tarjeta-menu-juego {
@@ -758,49 +763,82 @@ body {
     font-size: 0.95rem;
   }
 
+  /* Botón Pantalla Completa en Móvil */
   .btn-fullscreen {
-    top: max(14px, env(safe-area-inset-top));
-    left: max(14px, env(safe-area-inset-left));
-    width: 42px;
-    height: 42px;
-    font-size: 1.15rem;
-  }
-
-  .tarjeta-info {
-    top: auto;
-    right: 12px;
-    bottom: max(12px, env(safe-area-inset-bottom));
-    left: 12px;
-    width: auto;
-  }
-
-  .reproductor-musica {
-    bottom: max(12px, env(safe-area-inset-bottom));
+    top: max(12px, env(safe-area-inset-top));
     left: max(12px, env(safe-area-inset-left));
-    padding: 0.6rem 0.9rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  /* REPRODUCTOR DE MÚSICA EN CELULAR: PASA A LA ESQUINA SUPERIOR DERECHA */
+  .reproductor-musica {
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+    bottom: auto;
+    left: auto;
+
+    padding: 0.45rem 0.75rem;
     gap: 8px;
+    max-width: calc(100vw - 80px);
+    z-index: 15;
   }
 
   .detalles-pista {
-    max-width: 110px;
+    max-width: 95px;
+  }
+
+  .titulo-cancion {
+    font-size: 0.82rem;
+  }
+
+  .artista-cancion {
+    font-size: 0.7rem;
+  }
+
+  .btn-audio {
+    width: 28px;
+    height: 28px;
+    font-size: 0.82rem;
+  }
+
+  .btn-play-destacado {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  /* TARJETA DE INFORMACIÓN DEL PLANETA: ANCLADA ABAJO SIN OBSTRUCCIONES */
+  .tarjeta-info {
+    top: auto;
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    left: 10px;
+    width: auto;
+    z-index: 25;
   }
 
   .tarjeta-cara {
-    max-height: min(75vh, 620px);
-    max-height: min(75dvh, 620px);
-    padding: 1rem;
+    max-height: min(65vh, 520px);
+    max-height: min(65dvh, 520px);
+    padding: 0.9rem 1rem;
+    border-radius: 16px;
   }
 
   .tarjeta-cara h2 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
   }
 
   .boton-cerrar {
-    top: 8px;
-    right: 8px;
+    top: 6px;
+    right: 6px;
+    width: 34px;
+    height: 34px;
   }
 
   .modal-palabra {
-    bottom: 80px;
+    bottom: 24px;
+    z-index: 30;
   }
 }
