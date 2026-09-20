@@ -18,15 +18,57 @@
   <!-- Contenedor a pantalla completa -->
   <div id="escena"></div>
 
+  <!-- Reproductor de Música Flotante (Esquina Inferior Izquierda) -->
+    <aside id="reproductor-musica" class="reproductor-musica">
+      <div class="info-musica">
+        <span class="icono-disco">🎵</span>
+        <div class="detalles-pista">
+          <span id="musica-titulo" class="titulo-cancion">Love Story</span>
+          <span id="musica-artista" class="artista-cancion">Indila</span>
+        </div>
+      </div>
+      <div class="controles-musica">
+        <button id="btn-musica-prev" class="btn-audio" aria-label="Anterior">⏮</button>
+        <button id="btn-musica-play" class="btn-audio btn-play-destacado" aria-label="Reproducir o Pausar">▶</button>
+        <button id="btn-musica-next" class="btn-audio" aria-label="Siguiente">⏭</button>
+      </div>
+    </aside>
+
+  <div id="contenedor-palabras-flotantes"></div>
+
+    <!-- Modal / Tarjeta de Palabra Bonita al clickear rosa -->
+    <div id="modal-palabra" class="modal-palabra" hidden>
+      <div class="modal-palabra-contenido">
+        <button id="cerrar-modal-palabra" class="boton-cerrar-modal" aria-label="Cerrar">&times;</button>
+        <p class="etiqueta-modal">Una rosa del cosmos para ti:</p>
+        <h3 id="texto-palabra-modal" class="palabra-destacada"></h3>
+      </div>
+    </div>
+  <!-- Contenedor principal de la tarjeta -->
   <aside id="info-planeta" class="tarjeta-info" hidden>
-    <button id="cerrar-tarjeta" class="boton-cerrar" aria-label="Cerrar tarjeta">
-      ×
-    </button>
+    <!-- Contenedor interior que hace la animación de giro -->
+    <div id="tarjeta-inner" class="tarjeta-inner">
+      
+      <!-- FRENTE DE LA CARTA -->
+      <div class="tarjeta-cara tarjeta-front">
+        <button class="boton-cerrar btn-cerrar-accion" aria-label="Cerrar tarjeta">×</button>
+        <h2 id="info-titulo"></h2>
+        <p id="info-desc"></p>
+        <div id="info-video" class="contenedor-video" hidden></div>
+        <button id="btn-girar-frente" class="boton-accion">Mensaje</button>
+      </div>
 
-    <h2 id="info-titulo"></h2>
-    <p id="info-desc"></p>
+      <!-- REVERSO DE LA CARTA -->
+      <div class="tarjeta-cara tarjeta-back">
+        <button class="boton-cerrar btn-cerrar-accion" aria-label="Cerrar tarjeta">×</button>
+        <div class="contenido-reverso">
+          <h2>Mensaje</h2>
+          <p id="info-mensaje" class="texto-mensaje"></p>
+        </div>
+        <button id="btn-girar-atras" class="boton-accion">Volver</button>
+      </div>
 
-    <div id="info-video" class="contenedor-video" hidden></div>
+    </div>
   </aside>
 
   <script type="module">
