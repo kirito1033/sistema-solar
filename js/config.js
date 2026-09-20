@@ -9,7 +9,8 @@ export const CONFIG = {
     video: "./assets/lasso-no-pares-de-bailar.mp4",
     colorFallback: 0xffaa00,
     colorTema: "#ffaa00",
-    mensajeReverso: "Eres la luz y la energía que hace brillar todo mi universo."
+    mensajeReverso: "El sol se enamoró de la luna, y la luna del sol aunque sabían que no podían estar juntos, pero a veces se juntan y les importa una carajo si el mundo se oscurece!!."
+    //Buenos días, buenas tardes o buenas noches, no sé a qué hora veas esto, hermosa. Hice esto especialmente para ti. Aunque el futuro sea incierto y no sepamos cuánto dure lo nuestro, quiero disfrutar hasta el último segundo a tu lado. Eres tan especial que te distinguiría a kilómetros. Pase lo que pase, quiero que esto quede como un bonito recuerdo de lo mucho que te quiero y te adoro.
   },
   planetas: [
     {
@@ -22,7 +23,7 @@ export const CONFIG = {
       colorTema: "#a0a0a0",
       info: "Alex Ubago & Amaia Montero - Sin Miedo A Nada.",
       video: "./assets/alex-ubago-sin-miedo-a-nada.mp4",
-      mensajeReverso: "Pequeño pero resistente ante cualquier calor e intensidad."
+      mensajeReverso: "El universo necesitó miles de millones de años para llegar hasta este instante. Yo solo necesitaba conocerte para querer detener el tiempo."
     },
     {
       nombre: "Venus",
@@ -34,7 +35,7 @@ export const CONFIG = {
       colorTema: "#e8b86d",
       info: "Sin Bandera - Te Vi Venir",
       video: "./assets/Sin-Bandera-Te-Vi-Venir.mp4",
-      mensajeReverso: "Un mundo que resplandece como el lucero más hermoso del cielo."
+      mensajeReverso: "Te quiero ver y no puedo. Te quiero tener y no te tengo. Lo único que puedo hacer es quererte en silencio. Y no importa a qué hora mires esto, solo quiero decirte que hoy estoy pensando en ti como siempre."
     },
     {
       nombre: "Tierra",
@@ -46,7 +47,7 @@ export const CONFIG = {
       colorTema: "#2e93d8",
       info: "Andrés Cepeda - Un Ratito",
       video: "./assets/Andrés-Cepeda-Un-Ratito.mp4",
-      mensajeReverso: "No pares de bailar. Que este universo siempre tenga una canción para nosotros."
+      mensajeReverso: "Entre miles de rosas, tú no serías la más linda, sino la más hermosa, porque entre todas ellas ninguna tendría tu dulce aroma."
     },
     {
       nombre: "Marte",
@@ -58,7 +59,7 @@ export const CONFIG = {
       colorTema: "#e05324",
       info: "Chayanne - Dejaría Todo",
       video: "./assets/Chayanne-Dejaría-Todo.mp4",
-      mensajeReverso: "La pasión, el coraje y la fuerza viva en cada rincón."
+      mensajeReverso: "Por si nadie te lo ha dicho, a mí sí me importan tus problemas, a mí sí me importa tu salud, a mí sí me importan tus mensajes, a mí sí me importa cómo fue tu día, a mí sí me importa verte, a mí sí me importa escuchar tu opinión. En fin, a mí sí me importas, y muchísimo."
     },
     {
       nombre: "Júpiter",
@@ -70,7 +71,7 @@ export const CONFIG = {
       colorTema: "#d89668",
       info: "Melendi - Destino o Casualidad ft. Ha*Ash",
       video: "./assets/Melendi-Destino-o-Casualidad.mp4",
-      mensajeReverso: "Un corazón inmenso y protector capaz de albergar mundos."
+      mensajeReverso: "Me dijieron que para enamorarte tenia que hacerte sonreír, pero cuando te veo sonreír el que se enamora soy yo."
     },
     {
       nombre: "Saturno",
@@ -83,7 +84,7 @@ export const CONFIG = {
       video: "./assets/pablo-alborán-por-fin.mp4",
       tieneAnillo: true,
       info: "Pablo Alborán - Por fin.",
-      mensajeReverso: "La belleza infinita reside en los anillos de cada promesa."
+      mensajeReverso: "Incluso si nuestros gustos no coinciden, me gustaria ver tus series favoritas, probar la comida que te encanta, ir a esos lugares que te hacen feliz, escuchar tu artista favorito y descubrir todo lo que te gusta, solo para entenderte un poquito más."
     },
     {
       nombre: "Urano",
@@ -95,7 +96,7 @@ export const CONFIG = {
       colorTema: "#4dd0e1",
       video: "./assets/Ed-Sheeran-Perfect.mp4",
       info: "Ed Sheeran - Perfect.",
-      mensajeReverso: "Girando a tu propio compás, original y auténtico."
+      mensajeReverso: "Perdón por insistir tanto, pero me arrepentiría el resto de mi vida si no hago hasta lo imposible para que te quedes."
     },
     {
       nombre: "Neptuno",
@@ -107,7 +108,7 @@ export const CONFIG = {
       colorTema: "#4464f2",
       info: "New West - Those Eyes.",
       video: "./assets/New-West-Those-Eyes/mp4",
-      mensajeReverso: "Misterioso, calmo y profundo como la inmensidad del océano cósmico."
+      mensajeReverso: "No siempre tengo cosas interesantes que contarte pero siempre tengo ganas de hablar contigo."
     }
   ],
   palabrasBonitas: [
