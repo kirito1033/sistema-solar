@@ -10,8 +10,33 @@ export const CONFIG = {
     colorFallback: 0xffaa00,
     colorTema: "#ffaa00",
     mensajeReverso: "El sol se enamoró de la luna, y la luna del sol aunque sabían que no podían estar juntos, pero a veces se juntan y les importa una carajo si el mundo se oscurece!!.",
-    //Buenos días, buenas tardes o buenas noches, no sé a qué hora veas esto, hermosa. Hice esto especialmente para ti. Aunque el futuro sea incierto y no sepamos cuánto dure lo nuestro, quiero disfrutar hasta el último segundo a tu lado. Eres tan especial que te distinguiría a kilómetros. Pase lo que pase, quiero que esto quede como un bonito recuerdo de lo mucho que te quiero y te adoro.
-    
+    letras: [
+    { time: 12, text: "El sol juega con tu pelo" },
+    { time: 17, text: "Bailas y paras el tiempo, todos te están viendo" },
+    { time: 23, text: "Nada normal, es original, en trance estoy" },
+    { time: 29, text: "Y así defines arte sin siquiera despeinarte" },
+    { time: 37, text: "Lo lamento, no sé escribir" },
+    { time: 41, text: "Ojalá pudiera describir" },
+    { time: 46, text: "En pocas palabras, lo que eres para mí" },
+    { time: 55, text: "En pocas palabras, lo que eres para mí" },
+    { time: 70, text: "Veo cómo la luz" },
+    { time: 75, text: "Salta de tu cara al suelo y regresa" },
+    { time: 81, text: "Hay veces que te pierdo en el mar de gente" },
+    { time: 87, text: "Pero, es fácil encontrarte porque eres diferente" },
+    { time: 97, text: "Lo lamento, no sé escribir" },
+    { time: 101, text: "Ojalá pudiera describir" },
+    { time: 104, text: "En pocas palabras, lo que eres para mí" },
+    { time: 109, text: "En pocas palabras, lo que eres para mí" },
+    { time: 116, text: "Yo no busco una razón para llamar tu atención" },
+    { time: 120, text: "Solo quiero que no pares de bailar" },
+    { time: 129, text: "Yo no busco una razón para entrar en tu corazón" },
+    { time: 136, text: "Solo quiero que no pares de bailar" },
+    { time: 144, text: "No pares de bailar" },
+    { time: 149, text: "En pocas palabras, eres todo para mí" },
+    { time: 154, text: "En pocas palabras, eres todo para mí" },
+    { time: 161, text: "En pocas palabras, eres todo para, todo para mí" },
+    { time: 166, text: "Mí, mí" }
+    ]
   },
   planetas: [
     {
@@ -24,7 +49,47 @@ export const CONFIG = {
       colorTema: "#a0a0a0",
       info: "Alex Ubago & Amaia Montero - Sin Miedo A Nada.",
       video: "./assets/alex-ubago-sin-miedo-a-nada.mp4",
-      mensajeReverso: "El universo necesitó miles de millones de años para llegar hasta este instante. Yo solo necesitaba conocerte para querer detener el tiempo."
+      mensajeReverso: "El universo necesitó miles de millones de años para llegar hasta este instante. Yo solo necesitaba conocerte para querer detener el tiempo.",
+      letras: [ 
+      { "time": 5, "text": "Me muero por suplicarte que no te vayas" },
+      { "time": 10, "text": "Mi vida, me muero por escucharte" },
+      { "time": 16, "text": "Decir las cosas que nunca digas" },
+      { "time": 21, "text": "Mas me callo y te marchas" },
+      { "time": 25, "text": "Aún tengo la esperanza" },
+      { "time": 27, "text": "De ser capaz algún día" },
+      { "time": 30, "text": "De no esconder las heridas que me duelen" },
+      { "time": 35, "text": "Al pensar que te voy queriendo cada día" },
+      { "time": 43, "text": "¿Cuánto tiempo vamos a esperar?" },
+      { "time": 52, "text": "Me muero por abrazarte" },
+      { "time": 56, "text": "Y que me abraces tan fuerte" },
+      { "time": 59, "text": "Me muero por divertirte" },
+      { "time": 64, "text": "Y que me beses cuando despierte" },
+      { "time": 67, "text": "Acomodado en tu pecho" },
+      { "time": 71, "text": "Hasta que el sol aparezca" },
+      { "time": 74, "text": "Me voy perdiendo en tu aroma" },
+      { "time": 78, "text": "Me voy perdiendo en tus labios que se acercan" },
+      { "time": 81, "text": "Susurrando palabras que llegan a este pobre corazón" },
+      { "time": 90, "text": "Voy sintiendo el fuego en mi interior" },
+      { "time": 95, "text": "Me muero por conocerte" },
+      { "time": 98, "text": "Saber qué es lo que piensas" },
+      { "time": 104, "text": "Abrir todas tus puertas" },
+      { "time": 109, "text": "Y vencer esas tormentas que nos quieran abatir" },
+      { "time": 113, "text": "Centrar en tus ojos mi mirada" },
+      { "time": 117, "text": "Cantar contigo al alba" },
+      { "time": 120, "text": "Besarnos hasta desgastar nuestros labios" },
+      { "time": 127, "text": "Y ver en tu rostro cada día" },
+      { "time": 131, "text": "Crecer esa semilla" },
+      { "time": 135, "text": "Crear, soñar, dejar todo surgir" },
+      { "time": 141, "text": "Apartando el miedo a sufrir" },
+      { "time": 150, "text": "Me muero por explicarte lo que pasa por mi mente" },
+      { "time": 157, "text": "Me muero por intrigarte y seguir siendo capaz de sorprenderte" },
+      { "time": 165, "text": "Sentir cada día ese flechazo al verte" },
+      { "time": 171, "text": "¿Qué más dará lo que digan?" },
+      { "time": 175, "text": "¿Qué más dará lo que piensen?" },
+      { "time": 178, "text": "Si estoy loca es cosa mía" },
+      { "time": 181, "text": "Y ahora vuelvo a mirar, el mundo a mi favor" },
+      { "time": 188, "text": "Vuelvo a ver brillar la luz del sol" }
+      ]
     },
     {
       nombre: "Venus",
@@ -36,7 +101,8 @@ export const CONFIG = {
       colorTema: "#e8b86d",
       info: "Sin Bandera - Te Vi Venir",
       video: "./assets/Sin-Bandera-Te-Vi-Venir.mp4",
-      mensajeReverso: "Te quiero ver y no puedo. Te quiero tener y no te tengo. Lo único que puedo hacer es quererte en silencio. Y no importa a qué hora mires esto, solo quiero decirte que hoy estoy pensando en ti como siempre."
+      mensajeReverso: "Te quiero ver y no puedo. Te quiero tener y no te tengo. Lo único que puedo hacer es quererte en silencio. Y no importa a qué hora mires esto, solo quiero decirte que hoy estoy pensando en ti como siempre.",
+      letras: [ ]
     },
     {
       nombre: "Tierra",
@@ -48,7 +114,8 @@ export const CONFIG = {
       colorTema: "#2e93d8",
       info: "Andrés Cepeda - Un Ratito",
       video: "./assets/Andrés-Cepeda-Un-Ratito.mp4",
-      mensajeReverso: "Entre miles de rosas, tú no serías la más linda, sino la más hermosa, porque entre todas ellas ninguna tendría tu dulce aroma."
+      mensajeReverso: "Entre miles de rosas, tú no serías la más linda, sino la más hermosa, porque entre todas ellas ninguna tendría tu dulce aroma.",
+      letras: [ ]
     },
     {
       nombre: "Marte",
@@ -60,7 +127,8 @@ export const CONFIG = {
       colorTema: "#e05324",
       info: "Chayanne - Dejaría Todo",
       video: "./assets/Chayanne-Dejaría-Todo.mp4",
-      mensajeReverso: "Por si nadie te lo ha dicho, a mí sí me importan tus problemas, a mí sí me importa tu salud, a mí sí me importan tus mensajes, a mí sí me importa cómo fue tu día, a mí sí me importa verte, a mí sí me importa escuchar tu opinión. En fin, a mí sí me importas, y muchísimo."
+      mensajeReverso: "Por si nadie te lo ha dicho, a mí sí me importan tus problemas, a mí sí me importa tu salud, a mí sí me importan tus mensajes, a mí sí me importa cómo fue tu día, a mí sí me importa verte, a mí sí me importa escuchar tu opinión. En fin, a mí sí me importas, y muchísimo.",
+      letras: [ ]
     },
     {
       nombre: "Júpiter",
@@ -72,7 +140,8 @@ export const CONFIG = {
       colorTema: "#d89668",
       info: "Melendi - Destino o Casualidad ft. Ha*Ash",
       video: "./assets/Melendi-Destino-o-Casualidad.mp4",
-      mensajeReverso: "Me dijieron que para enamorarte tenia que hacerte sonreír, pero cuando te veo sonreír el que se enamora soy yo."
+      mensajeReverso: "Me dijieron que para enamorarte tenia que hacerte sonreír, pero cuando te veo sonreír el que se enamora soy yo.",
+      letras: [ ]
     },
     {
       nombre: "Saturno",
@@ -85,7 +154,8 @@ export const CONFIG = {
       video: "./assets/pablo-alborán-por-fin.mp4",
       tieneAnillo: true,
       info: "Pablo Alborán - Por fin.",
-      mensajeReverso: "Incluso si nuestros gustos no coinciden, me gustaria ver tus series favoritas, probar la comida que te encanta, ir a esos lugares que te hacen feliz, escuchar tu artista favorito y descubrir todo lo que te gusta, solo para entenderte un poquito más."
+      mensajeReverso: "Incluso si nuestros gustos no coinciden, me gustaria ver tus series favoritas, probar la comida que te encanta, ir a esos lugares que te hacen feliz, escuchar tu artista favorito y descubrir todo lo que te gusta, solo para entenderte un poquito más.",
+      letras: [ ]
     },
     {
       nombre: "Urano",
@@ -97,7 +167,8 @@ export const CONFIG = {
       colorTema: "#4dd0e1",
       video: "./assets/Ed-Sheeran-Perfect.mp4",
       info: "Ed Sheeran - Perfect.",
-      mensajeReverso: "Perdón por insistir tanto, pero me arrepentiría el resto de mi vida si no hago hasta lo imposible para que te quedes."
+      mensajeReverso: "Perdón por insistir tanto, pero me arrepentiría el resto de mi vida si no hago hasta lo imposible para que te quedes.",
+      letras: [ ]
     },
     {
       nombre: "Neptuno",
@@ -109,7 +180,8 @@ export const CONFIG = {
       colorTema: "#4464f2",
       info: "New West - Those Eyes.",
       video: "./assets/New-West-Those-Eyes.mp4",
-      mensajeReverso: "No siempre tengo cosas interesantes que contarte pero siempre tengo ganas de hablar contigo."
+      mensajeReverso: "No siempre tengo cosas interesantes que contarte pero siempre tengo ganas de hablar contigo.",
+      letras: [ ]
     }
   ],
   palabrasBonitas: [

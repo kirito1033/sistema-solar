@@ -842,3 +842,52 @@ body {
     z-index: 30;
   }
 }
+
+/* ==================================================
+   LETRAS SPOTIFY DEBAJO DEL VIDEO
+   ================================================== */
+.contenedor-letras-spotify {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 0.7rem 0.95rem;
+  background: rgba(14, 12, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+
+.contenedor-letras-spotify[hidden] {
+  display: none !important;
+}
+
+.icono-letra-spotify {
+  font-size: 1.05rem;
+  color: var(--color-planeta, #ffaa00);
+  line-height: 1;
+  user-select: none;
+}
+
+.linea-letra-spotify {
+  margin: 0;
+  flex: 1;
+  text-align: left;
+  font-size: clamp(0.92rem, 1.6vw, 1.02rem);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.linea-letra-spotify.cambiando {
+  opacity: 0.2;
+  transform: translateY(3px);
+}
