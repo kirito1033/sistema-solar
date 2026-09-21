@@ -5,7 +5,7 @@ export const CONFIG = {
     nombre: "El Sol",
     info: "Lasso - No Pares de Bailar",
     radio: 2,
-    textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg",
+    textura: "./assets/sol.jpg",
     video: "./assets/lasso-no-pares-de-bailar.mp4",
     colorFallback: 0xffaa00,
     colorTema: "#ffaa00",
@@ -15,7 +15,7 @@ export const CONFIG = {
   planetas: [
     {
       nombre: "Mercurio",
-      textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg",
+       textura: "./assets/mercurio.jpg",
       radio: 0.3,
       distancia: 4,
       velocidad: 0.8,
@@ -27,7 +27,7 @@ export const CONFIG = {
     },
     {
       nombre: "Venus",
-      textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg",
+      textura: "./assets/venus.jpg",
       radio: 0.5,
       distancia: 6,
       velocidad: 0.6,
@@ -39,7 +39,7 @@ export const CONFIG = {
     },
     {
       nombre: "Tierra",
-      textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/earth_atmos_2048.jpg",
+      textura: "./assets/tierra.jpg",
       radio: 0.55,
       distancia: 8.5,
       velocidad: 0.4,
@@ -51,7 +51,7 @@ export const CONFIG = {
     },
     {
       nombre: "Marte",
-      textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg",
+      textura: "./assets/marte.jpg",
       radio: 0.4,
       distancia: 11,
       velocidad: 0.3,
@@ -63,7 +63,7 @@ export const CONFIG = {
     },
     {
       nombre: "Júpiter",
-      textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg",
+      textura: "./assets/jupiter.jpg",
       radio: 1.5,
       distancia: 16,
       velocidad: 0.15,
@@ -75,7 +75,7 @@ export const CONFIG = {
     },
     {
       nombre: "Saturno",
-      textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg",
+      textura: "./assets/saturno.jpg",
       radio: 1.2,
       distancia: 21,
       velocidad: 0.1,
@@ -88,7 +88,7 @@ export const CONFIG = {
     },
     {
       nombre: "Urano",
-      textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg",
+       textura: "./assets/urano.jpg",
       radio: 0.8,
       distancia: 26,
       velocidad: 0.07,
@@ -100,14 +100,14 @@ export const CONFIG = {
     },
     {
       nombre: "Neptuno",
-      textura: "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/moon_1024.jpg",
+      textura: "./assets/neptuno.jpg",
       radio: 0.75,
       distancia: 31,
       velocidad: 0.05,
       colorFallback: 0x3d5afe,
       colorTema: "#4464f2",
       info: "New West - Those Eyes.",
-      video: "./assets/New-West-Those-Eyes/mp4",
+      video: "./assets/New-West-Those-Eyes.mp4",
       mensajeReverso: "No siempre tengo cosas interesantes que contarte pero siempre tengo ganas de hablar contigo."
     }
   ],
