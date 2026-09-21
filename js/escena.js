@@ -16,7 +16,7 @@ const camara = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerH
 camara.position.set(0, 36, 75);
 
 const renderizador = new THREE.WebGLRenderer({
-  antialias: !esMovil, // Desactivar antialias pesado en móviles para 60 FPS estables
+  antialias: !esMovil,
   alpha: true,
   powerPreference: "high-performance"
 });
@@ -38,7 +38,7 @@ escena.add(luzSolar);
 // ==================================================
 function crearTexturaNebulosaSuave(colorCentro, colorBorde) {
   const canvas = document.createElement("canvas");
-  canvas.width = 256; // 256px optimizado para menor consumo de VRAM
+  canvas.width = 256;
   canvas.height = 256;
   const ctx = canvas.getContext("2d");
 
@@ -141,7 +141,8 @@ const esquemasConstelaciones = [
 const matLineasConstelacion = new THREE.LineBasicMaterial({
   color: 0x88bbff,
   transparent: true,
-  opacity: 0.28
+  opacity: 0.28,
+  depthWrite: false
 });
 
 const matPuntoConstelacion = new THREE.PointsMaterial({
@@ -149,7 +150,8 @@ const matPuntoConstelacion = new THREE.PointsMaterial({
   size: 0.65,
   transparent: true,
   opacity: 0.75,
-  blending: THREE.AdditiveBlending
+  blending: THREE.AdditiveBlending,
+  depthWrite: false
 });
 
 esquemasConstelaciones.forEach((puntos) => {
@@ -199,7 +201,8 @@ const matPolvo = new THREE.PointsMaterial({
   vertexColors: true,
   transparent: true,
   opacity: 0.55,
-  blending: THREE.AdditiveBlending
+  blending: THREE.AdditiveBlending,
+  depthWrite: false
 });
 const polvoEstelar = new THREE.Points(geoPolvoEstrellas, matPolvo);
 escena.add(polvoEstelar);
@@ -250,7 +253,8 @@ const materialRosa = new THREE.SpriteMaterial({
   map: texturaRosa,
   color: 0xffffff,
   transparent: true,
-  opacity: 0.92
+  opacity: 0.92,
+  depthWrite: false
 });
 
 const grupoRosas = new THREE.Group();
@@ -282,32 +286,38 @@ for (let i = 0; i < numRosas; i++) {
 escena.add(grupoRosas);
 
 // ==================================================
-// 5. SOL Y PLANETAS
+// 5. SOL Y PLANETAS (CORRECCIÓN DE TRANSPARENCIA Y PROFUNDIDAD)
 // ==================================================
 const cargadorTexturas = new THREE.TextureLoader();
 cargadorTexturas.setCrossOrigin("anonymous");
 
-// Sol
+// Sol (Esfera sólida que no escribe transparencia)
 const texturaSol = cargadorTexturas.load(CONFIG.sol.textura);
 const sol = new THREE.Mesh(
   new THREE.SphereGeometry(CONFIG.sol.radio, esMovil ? 24 : 32, esMovil ? 24 : 32),
   new THREE.MeshBasicMaterial({
     map: texturaSol,
-    color: 0xffb338
+    color: 0xffb338,
+    transparent: false,
+    depthWrite: true,
+    depthTest: true
   })
 );
 sol.userData = { ...CONFIG.sol };
 escena.add(sol);
 
-// Halo de resplandor
+// Halo de resplandor (depthWrite: false evita que recorte las órbitas por detrás)
 const matHaloSol = new THREE.SpriteMaterial({
   map: crearTexturaNebulosaSuave("rgba(255, 175, 50, 0.40)", "rgba(255, 100, 10, 0.05)"),
   blending: THREE.AdditiveBlending,
   transparent: true,
-  opacity: 0.45
+  opacity: 0.45,
+  depthWrite: false,
+  depthTest: true
 });
 const haloSol = new THREE.Sprite(matHaloSol);
 haloSol.scale.set(CONFIG.sol.radio * 2.8, CONFIG.sol.radio * 2.8, 1);
+haloSol.renderOrder = 2;
 sol.add(haloSol);
 
 // Planetas
@@ -334,24 +344,28 @@ CONFIG.planetas.forEach((datos) => {
       color: 0xe6dac3,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.75
+      opacity: 0.75,
+      depthWrite: false
     });
     const anillo = new THREE.Mesh(geometriaAnillo, materialAnillo);
     anillo.rotation.x = Math.PI / 2;
     malla.add(anillo);
   }
 
-  // Guía de Órbita
+  // Guía de Órbita (depthWrite: false y renderOrder 0 evitan que el halo solar la tape)
   const geometriaOrbita = new THREE.RingGeometry(datos.distancia - 0.065, datos.distancia + 0.065, esMovil ? 64 : 128);
   const materialOrbita = new THREE.MeshBasicMaterial({
     color: 0xc8e0ff,
     side: THREE.DoubleSide,
     transparent: true,
     opacity: 0.58,
-    blending: THREE.AdditiveBlending
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    depthTest: true
   });
   const orbita = new THREE.Mesh(geometriaOrbita, materialOrbita);
   orbita.rotation.x = Math.PI / 2;
+  orbita.renderOrder = 0;
   escena.add(orbita);
 });
 
@@ -373,6 +387,8 @@ const infoTitulo = document.getElementById("info-titulo");
 const infoDesc = document.getElementById("info-desc");
 const infoVideo = document.getElementById("info-video");
 const infoMensaje = document.getElementById("info-mensaje");
+const contenedorLetras = document.getElementById("contenedor-letras");
+const lineaLetraActiva = document.getElementById("linea-letra-activa");
 const btnGirarFrente = document.getElementById("btn-girar-frente");
 const btnGirarAtras = document.getElementById("btn-girar-atras");
 const botonesCerrar = document.querySelectorAll(".btn-cerrar-accion");
@@ -381,6 +397,8 @@ const modalPalabra = document.getElementById("modal-palabra");
 const textoPalabraModal = document.getElementById("texto-palabra-modal");
 const btnCerrarModal = document.getElementById("cerrar-modal-palabra");
 const contenedorFlotantes = document.getElementById("contenedor-palabras-flotantes");
+
+let indiceLetraActual = -1;
 
 if (btnCerrarModal) {
   btnCerrarModal.addEventListener("click", () => {
@@ -852,7 +870,7 @@ function animar(tiempo) {
 renderizador.setAnimationLoop(animar);
 
 // ==================================================
-// 13. TARJETA DE PLANETAS
+// 13. TARJETA DE PLANETAS Y SINCRONIZACIÓN DE LETRAS
 // ==================================================
 function mostrarTarjeta(datosPlaneta) {
   tarjetaInner.classList.remove("girada");
@@ -871,6 +889,7 @@ function mostrarTarjeta(datosPlaneta) {
     videoAnterior.load();
   }
   infoVideo.innerHTML = "";
+  indiceLetraActual = -1;
 
   if (datosPlaneta.video) {
     const video = document.createElement("video");
@@ -903,10 +922,45 @@ function mostrarTarjeta(datosPlaneta) {
       }
     });
 
+    // Sincronización de letras estilo Spotify
+    if (datosPlaneta.letras && datosPlaneta.letras.length > 0 && contenedorLetras && lineaLetraActiva) {
+      contenedorLetras.removeAttribute("hidden");
+      lineaLetraActiva.textContent = "...";
+
+      video.addEventListener("timeupdate", () => {
+        const tiempoActual = video.currentTime;
+        let nuevoIndice = -1;
+
+        for (let i = 0; i < datosPlaneta.letras.length; i++) {
+          if (tiempoActual >= datosPlaneta.letras[i].time) {
+            nuevoIndice = i;
+          } else {
+            break;
+          }
+        }
+
+        if (nuevoIndice !== indiceLetraActual) {
+          indiceLetraActual = nuevoIndice;
+          lineaLetraActiva.classList.add("cambiando");
+          setTimeout(() => {
+            lineaLetraActiva.textContent = nuevoIndice >= 0 ? datosPlaneta.letras[nuevoIndice].text : "...";
+            lineaLetraActiva.classList.remove("cambiando");
+          }, 120);
+        }
+      });
+
+      video.addEventListener("seeked", () => {
+        indiceLetraActual = -1;
+      });
+    } else if (contenedorLetras) {
+      contenedorLetras.setAttribute("hidden", "");
+    }
+
     infoVideo.appendChild(video);
     infoVideo.hidden = false;
   } else {
     infoVideo.hidden = true;
+    if (contenedorLetras) contenedorLetras.setAttribute("hidden", "");
   }
 
   infoPanel.hidden = false;
@@ -922,6 +976,7 @@ function ocultarTarjeta() {
   infoVideo.innerHTML = "";
   infoVideo.hidden = true;
   infoPanel.hidden = true;
+  if (contenedorLetras) contenedorLetras.setAttribute("hidden", "");
   tarjetaInner.classList.remove("girada");
 
   if (pausadoPorVideo) {

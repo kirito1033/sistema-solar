@@ -9,8 +9,9 @@ export const CONFIG = {
     video: "./assets/lasso-no-pares-de-bailar.mp4",
     colorFallback: 0xffaa00,
     colorTema: "#ffaa00",
-    mensajeReverso: "El sol se enamoró de la luna, y la luna del sol aunque sabían que no podían estar juntos, pero a veces se juntan y les importa una carajo si el mundo se oscurece!!."
+    mensajeReverso: "El sol se enamoró de la luna, y la luna del sol aunque sabían que no podían estar juntos, pero a veces se juntan y les importa una carajo si el mundo se oscurece!!.",
     //Buenos días, buenas tardes o buenas noches, no sé a qué hora veas esto, hermosa. Hice esto especialmente para ti. Aunque el futuro sea incierto y no sepamos cuánto dure lo nuestro, quiero disfrutar hasta el último segundo a tu lado. Eres tan especial que te distinguiría a kilómetros. Pase lo que pase, quiero que esto quede como un bonito recuerdo de lo mucho que te quiero y te adoro.
+    
   },
   planetas: [
     {
@@ -242,5 +243,7 @@ export const CONFIG = {
     }
     
   ]
+
+  
   
 };
