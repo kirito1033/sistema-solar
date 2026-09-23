@@ -181,7 +181,7 @@ body {
   letter-spacing: 1.5px;
   color: #ffffff;
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.9),
-               0 0 45px rgba(231, 169, 181, 0.65);
+                0 0 45px rgba(231, 169, 181, 0.65);
 }
 
 .cuerpo-mensaje-inicio {
@@ -262,7 +262,7 @@ body {
 }
 
 /* ==================================================
-   BOTÓN PANTALLA COMPLETA (SUPERIOR IZQUIERDA)
+   BOTÓN PANTALLA COMPLETA
    ================================================== */
 .btn-fullscreen {
   position: fixed;
@@ -298,7 +298,7 @@ body {
 }
 
 /* ==================================================
-   REPRODUCTOR DE MÚSICA FLOTANTE (ESCRITORIO: ABAJO IZQ)
+   REPRODUCTOR DE MÚSICA FLOTANTE
    ================================================== */
 .reproductor-musica {
   position: fixed;
@@ -440,8 +440,8 @@ body {
   font-size: clamp(1.3rem, 2.5vw, 2rem);
   font-weight: bold;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.95),
-               0 0 22px rgba(220, 235, 255, 0.8),
-               0 0 35px rgba(180, 215, 255, 0.5);
+                0 0 22px rgba(220, 235, 255, 0.8),
+                0 0 35px rgba(180, 215, 255, 0.5);
   pointer-events: none;
   animation: flotarDesvanecer 2.5s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
   white-space: nowrap;
@@ -519,7 +519,7 @@ body {
   color: #ffffff;
   font-size: 1.65rem;
   text-shadow: 0 0 12px rgba(255, 255, 255, 0.9),
-               0 0 24px rgba(210, 230, 255, 0.7);
+                0 0 24px rgba(210, 230, 255, 0.7);
 }
 
 .boton-cerrar-modal {
@@ -734,7 +734,7 @@ body {
 }
 
 /* ==================================================
-   RESPONSIVO MÓVIL Y TABLET (SOLUCIÓN DE SUPERPOSICIÓN)
+   RESPONSIVO MÓVIL Y TABLET
    ================================================== */
 @media (max-width: 992px) {
   .escenario-menu-inicio {
@@ -763,7 +763,6 @@ body {
     font-size: 0.95rem;
   }
 
-  /* Botón Pantalla Completa en Móvil */
   .btn-fullscreen {
     top: max(12px, env(safe-area-inset-top));
     left: max(12px, env(safe-area-inset-left));
@@ -772,7 +771,6 @@ body {
     font-size: 1.1rem;
   }
 
-  /* REPRODUCTOR DE MÚSICA EN CELULAR: PASA A LA ESQUINA SUPERIOR DERECHA */
   .reproductor-musica {
     top: max(12px, env(safe-area-inset-top));
     right: max(12px, env(safe-area-inset-right));
@@ -809,7 +807,6 @@ body {
     font-size: 0.9rem;
   }
 
-  /* TARJETA DE INFORMACIÓN DEL PLANETA: ANCLADA ABAJO SIN OBSTRUCCIONES */
   .tarjeta-info {
     top: auto;
     right: 10px;

@@ -2,9 +2,10 @@
 <html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema Solar</title>
   <link rel="stylesheet" href="./css/estilos.css">
+  
   <script type="importmap">
     {
       "imports": {
@@ -15,101 +16,105 @@
   </script>
 </head>
 <body>
-   <div id="pantalla-inicio" class="pantalla-inicio">
-      <div class="destellos-fondo-inicio"></div>
-      
-      <!-- Contenedor general que incluye los dos pilares de rosas 3D a los lados -->
-      <div class="escenario-menu-inicio">
-        
-        <!-- Pilar 3D Izquierdo -->
-        <div class="pilar-rosa-lateral pilar-izquierdo">
-          <canvas id="canvas-rosa-izq" class="canvas-rosa-3d" title="Arrastra para girar la rosa"></canvas>
-          <span class="etiqueta-pilar">GIRA LA ROSA</span>
+  <!-- Pantalla de Inicio Estilo Menú de Juego con Rosas 3D -->
+  <div id="pantalla-inicio" class="pantalla-inicio">
+    <div class="destellos-fondo-inicio"></div>
+    
+    <!-- Contenedor general que incluye los dos pilares de rosas 3D a los lados -->
+    <div class="escenario-menu-inicio">
+      <!-- Pilar 3D Izquierdo -->
+      <div class="pilar-rosa-lateral pilar-izquierdo">
+        <canvas id="canvas-rosa-izq" class="canvas-rosa-3d" title="Arrastra para girar la rosa"></canvas>
+        <span class="etiqueta-pilar">GIRA LA ROSA</span>
+      </div>
+
+      <!-- Tarjeta Central del Mensaje -->
+      <div class="tarjeta-menu-juego">
+        <div class="badge-mes">
+          <span class="punto-luz"></span>
+          <span>Primer Mes Juntos</span>
+          <span class="punto-luz"></span>
         </div>
 
-        <!-- Tarjeta Central del Mensaje -->
-        <div class="tarjeta-menu-juego">
-          <div class="badge-mes">
-            <span class="punto-luz"></span>
-            <span>Primer Mes Juntos</span>
-            <span class="punto-luz"></span>
-          </div>
+        <h1 class="titulo-juego">Un Universo Contigo</h1>
 
-          <h1 class="titulo-juego">Un Universo Contigo</h1>
-          
-          <div class="cuerpo-mensaje-inicio">
-            <p class="parrafo-destacado">
-              Dicen que en el cosmos existen billones de planetas y constelaciones infinitas, pero en todo este inmenso espacio...
-            </p>
-            <p class="parrafo-emotivo">
-              Mi viaje favorito comenzó hace exactamente un mes a tu lado. Gracias por llenar mi universo de luz, risas y momentos inolvidables.
-            </p>
-          </div>
-
-          <div class="zona-boton-start">
-            <button id="btn-comenzar-viaje" class="btn-start-game">
-              <span class="simbolo-start">►</span>
-              <span>INICIAR VIAJE ESPACIAL</span>
-            </button>
-            <span class="hint-start">Pulsa para despegar y encender la música</span>
-          </div>
+        <div class="cuerpo-mensaje-inicio">
+          <p class="parrafo-destacado">
+            Dicen que en el cosmos existen billones de planetas y constelaciones infinitas, pero en todo este inmenso espacio...
+          </p>
+          <p class="parrafo-emotivo">
+            Mi viaje favorito comenzó hace exactamente un mes a tu lado. Gracias por llenar mi universo de luz, risas y momentos inolvidables.
+          </p>
         </div>
 
-        <!-- Pilar 3D Derecho -->
-        <div class="pilar-rosa-lateral pilar-derecho">
-          <canvas id="canvas-rosa-der" class="canvas-rosa-3d" title="Arrastra para girar la rosa"></canvas>
-          <span class="etiqueta-pilar">GIRA LA ROSA</span>
+        <div class="zona-boton-start">
+          <button id="btn-comenzar-viaje" class="btn-start-game">
+            <span class="simbolo-start">✦</span>
+            <span>INICIAR VIAJE ESPACIAL</span>
+          </button>
+          <span class="hint-start">Pulsa para despegar y encender la música</span>
         </div>
+      </div>
 
+      <!-- Pilar 3D Derecho -->
+      <div class="pilar-rosa-lateral pilar-derecho">
+        <canvas id="canvas-rosa-der" class="canvas-rosa-3d" title="Arrastra para girar la rosa"></canvas>
+        <span class="etiqueta-pilar">GIRA LA ROSA</span>
       </div>
     </div>
+  </div>
 
-  <!-- Contenedor a pantalla completa -->
+  <!-- Botón Pantalla Completa Flotante (Esquina Superior Izquierda) -->
+  <button id="btn-fullscreen" class="btn-fullscreen" aria-label="Pantalla completa" title="Pantalla Completa">
+    <span>⛶</span>
+  </button>
+
+  <!-- Contenedor 3D a pantalla completa -->
   <div id="escena"></div>
 
-  
-
-  <!-- Reproductor de Música Flotante (Esquina Inferior Izquierda) -->
-    <aside id="reproductor-musica" class="reproductor-musica">
-      <div class="info-musica">
-        <span class="icono-disco">🎵</span>
-        <div class="detalles-pista">
-          <span id="musica-titulo" class="titulo-cancion">Love Story</span>
-          <span id="musica-artista" class="artista-cancion">Indila</span>
-        </div>
-      </div>
-      <div class="controles-musica">
-        <button id="btn-musica-prev" class="btn-audio" aria-label="Anterior">⏮</button>
-        <button id="btn-musica-play" class="btn-audio btn-play-destacado" aria-label="Reproducir o Pausar">▶</button>
-        <button id="btn-musica-next" class="btn-audio" aria-label="Siguiente">⏭</button>
-      </div>
-    </aside>
-
-  <div id="contenedor-palabras-flotantes"></div>
-
-    <!-- Modal / Tarjeta de Palabra Bonita al clickear rosa -->
-    <div id="modal-palabra" class="modal-palabra" hidden>
-      <div class="modal-palabra-contenido">
-        <button id="cerrar-modal-palabra" class="boton-cerrar-modal" aria-label="Cerrar">&times;</button>
-        <p class="etiqueta-modal">Una rosa del cosmos para ti:</p>
-        <h3 id="texto-palabra-modal" class="palabra-destacada"></h3>
+  <!-- Reproductor de Música Flotante -->
+  <aside id="reproductor-musica" class="reproductor-musica">
+    <div class="info-musica">
+      <span class="icono-disco">♫</span>
+      <div class="detalles-pista">
+        <span id="musica-titulo" class="titulo-cancion">Love Story</span>
+        <span id="musica-artista" class="artista-cancion">Indila</span>
       </div>
     </div>
+    <div class="controles-musica">
+      <button id="btn-musica-prev" class="btn-audio" aria-label="Anterior">⏮</button>
+      <button id="btn-musica-play" class="btn-audio btn-play-destacado" aria-label="Reproducir o Pausar">▶</button>
+      <button id="btn-musica-next" class="btn-audio" aria-label="Siguiente">⏭</button>
+    </div>
+  </aside>
+
+  <!-- Contenedor de palabras flotantes al hacer click en rosas -->
+  <div id="contenedor-palabras-flotantes"></div>
+
+  <!-- Modal Tarjeta de Palabra Bonita al clickear rosa -->
+  <div id="modal-palabra" class="modal-palabra" hidden>
+    <div class="modal-palabra-contenido">
+      <button id="cerrar-modal-palabra" class="boton-cerrar-modal" aria-label="Cerrar">&times;</button>
+      <div class="indicador-rosa-modal"></div>
+      <p class="etiqueta-modal">Una rosa del cosmos para ti:</p>
+      <h3 id="texto-palabra-modal" class="palabra-destacada"></h3>
+    </div>
+  </div>
+
   <!-- Contenedor principal de la tarjeta -->
   <aside id="info-planeta" class="tarjeta-info" hidden>
     <!-- Contenedor interior que hace la animación de giro -->
     <div id="tarjeta-inner" class="tarjeta-inner">
-      
       <!-- FRENTE DE LA CARTA -->
       <div class="tarjeta-cara tarjeta-front">
-        <button class="boton-cerrar btn-cerrar-accion" aria-label="Cerrar tarjeta">×</button>
+        <button class="boton-cerrar btn-cerrar-accion" aria-label="Cerrar tarjeta">&times;</button>
         <h2 id="info-titulo"></h2>
         <p id="info-desc"></p>
         <div id="info-video" class="contenedor-video" hidden></div>
 
         <!-- REPRODUCTOR DE LETRA TIPO SPOTIFY -->
         <div id="contenedor-letras" class="contenedor-letras-spotify" hidden>
-          <span class="icono-letra-spotify">♪</span>
+          <span class="icono-letra-spotify">♫</span>
           <p id="linea-letra-activa" class="linea-letra-spotify">...</p>
         </div>
 
@@ -118,19 +123,18 @@
 
       <!-- REVERSO DE LA CARTA -->
       <div class="tarjeta-cara tarjeta-back">
-        <button class="boton-cerrar btn-cerrar-accion" aria-label="Cerrar tarjeta">×</button>
+        <button class="boton-cerrar btn-cerrar-accion" aria-label="Cerrar tarjeta">&times;</button>
         <div class="contenido-reverso">
           <h2>Mensaje</h2>
           <p id="info-mensaje" class="texto-mensaje"></p>
         </div>
         <button id="btn-girar-atras" class="boton-accion">Volver</button>
       </div>
-
     </div>
   </aside>
 
   <script type="module">
-    import("./js/escena.js").catch(console.error);
+    import './js/escena.js';
   </script>
 </body>
 </html>

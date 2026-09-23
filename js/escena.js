@@ -1,11 +1,11 @@
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { CONFIG } from "./config.js";
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CONFIG } from './config.js';
 
 // Detección de dispositivo móvil para optimización de rendimiento
 const esMovil = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent) || window.innerWidth < 768;
 
-const contenedor = document.getElementById("escena");
+const contenedor = document.getElementById('escena');
 const escena = new THREE.Scene();
 
 // Espacio cósmico profundo y elegante
@@ -15,12 +15,7 @@ escena.fog = new THREE.FogExp2(0x020208, 0.0028);
 const camara = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 camara.position.set(0, 36, 75);
 
-const renderizador = new THREE.WebGLRenderer({
-  antialias: !esMovil,
-  alpha: true,
-  powerPreference: "high-performance"
-});
-
+const renderizador = new THREE.WebGLRenderer({ antialias: !esMovil, alpha: true, powerPreference: 'high-performance' });
 // En celulares limitamos el pixelRatio a 1.5 para ahorrar batería y GPU
 renderizador.setPixelRatio(Math.min(window.devicePixelRatio, esMovil ? 1.5 : 2));
 renderizador.setSize(window.innerWidth, window.innerHeight);
@@ -33,15 +28,12 @@ escena.add(new THREE.AmbientLight(0xffffff, 0.85));
 const luzSolar = new THREE.PointLight(0xffeedd, 3.8, 140);
 escena.add(luzSolar);
 
-// ==================================================
-// 1. NEBULOSAS SUTILES DE FONDO (OPTIMIZADAS)
-// ==================================================
+// 1. NEBULOSAS SUTILES DE FONDO OPTIMIZADAS
 function crearTexturaNebulosaSuave(colorCentro, colorBorde) {
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   canvas.width = 256;
   canvas.height = 256;
-  const ctx = canvas.getContext("2d");
-
+  const ctx = canvas.getContext('2d');
   const centroX = 128;
   const centroY = 128;
   const radio = 120;
@@ -50,7 +42,7 @@ function crearTexturaNebulosaSuave(colorCentro, colorBorde) {
   grad.addColorStop(0, colorCentro);
   grad.addColorStop(0.4, colorCentro);
   grad.addColorStop(0.75, colorBorde);
-  grad.addColorStop(1, "rgba(0,0,0,0)");
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
 
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 256, 256);
@@ -62,7 +54,7 @@ function crearTexturaNebulosaSuave(colorCentro, colorBorde) {
     const rrad = 25 + Math.random() * 45;
     const subGrad = ctx.createRadialGradient(rx, ry, 0, rx, ry, rrad);
     subGrad.addColorStop(0, colorCentro);
-    subGrad.addColorStop(1, "rgba(0,0,0,0)");
+    subGrad.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = subGrad;
     ctx.beginPath();
     ctx.arc(rx, ry, rrad, 0, Math.PI * 2);
@@ -75,12 +67,11 @@ function crearTexturaNebulosaSuave(colorCentro, colorBorde) {
 }
 
 const grupoNebulosas = new THREE.Group();
-
 const coloresNebulosas = [
-  { centro: "rgba(110, 45, 170, 0.22)", borde: "rgba(35, 12, 85, 0.05)" },
-  { centro: "rgba(25, 95, 190, 0.20)", borde: "rgba(8, 28, 90, 0.04)" },
-  { centro: "rgba(180, 60, 115, 0.18)", borde: "rgba(70, 15, 45, 0.04)" },
-  { centro: "rgba(40, 140, 150, 0.17)", borde: "rgba(12, 50, 70, 0.03)" }
+  { centro: 'rgba(110, 45, 170, 0.22)', borde: 'rgba(35, 12, 85, 0.05)' },
+  { centro: 'rgba(25, 95, 190, 0.20)', borde: 'rgba(8, 28, 90, 0.04)' },
+  { centro: 'rgba(180, 60, 115, 0.18)', borde: 'rgba(70, 15, 45, 0.04)' },
+  { centro: 'rgba(40, 140, 150, 0.17)', borde: 'rgba(12, 50, 70, 0.03)' }
 ];
 
 const nubesPorTipo = esMovil ? 3 : 5;
@@ -99,13 +90,7 @@ coloresNebulosas.forEach((paleta) => {
     const dist = 58 + Math.random() * 65;
     const angulo = Math.random() * Math.PI * 2;
     const altura = (Math.random() - 0.5) * 45;
-
-    nube.position.set(
-      Math.cos(angulo) * dist,
-      altura,
-      Math.sin(angulo) * dist
-    );
-
+    nube.position.set(Math.cos(angulo) * dist, altura, Math.sin(angulo) * dist);
     const tamano = 48 + Math.random() * 35;
     nube.scale.set(tamano, tamano, 1);
     grupoNebulosas.add(nube);
@@ -113,29 +98,13 @@ coloresNebulosas.forEach((paleta) => {
 });
 escena.add(grupoNebulosas);
 
-// ==================================================
 // 2. CONSTELACIONES CÓSMICAS
-// ==================================================
 const grupoConstelaciones = new THREE.Group();
-
 const esquemasConstelaciones = [
-  [
-    [-35, 24, -45], [-32, 18, -48], [-28, 12, -44],
-    [-38, 30, -42], [-24, 32, -46],
-    [-40, 6, -42],  [-22, 4, -48]
-  ],
-  [
-    [32, 28, -50], [38, 33, -48], [44, 27, -52], [50, 31, -49], [55, 25, -51]
-  ],
-  [
-    [-45, -15, 35], [-38, -12, 40], [-30, -14, 38], [-22, -18, 36],
-    [-18, -25, 34], [-26, -26, 36], [-30, -14, 38]
-  ],
-  [
-    [28, -18, -40], [33, -12, -42], [39, -15, -45],
-    [35, -23, -43], [28, -28, -40], [21, -23, -37],
-    [17, -15, -35], [23, -12, -38], [28, -18, -40]
-  ]
+  [-35, 24, -45, -32, 18, -48, -28, 12, -44, -38, 30, -42, -24, 32, -46, -40, 6, -42, -22, 4, -48],
+  [32, 28, -50, 38, 33, -48, 44, 27, -52, 50, 31, -49, 55, 25, -51],
+  [-45, -15, 35, -38, -12, 40, -30, -14, 38, -22, -18, 36, -18, -25, 34, -26, -26, 36, -30, -14, 38],
+  [28, -18, -40, 33, -12, -42, 39, -15, -45, 35, -23, -43, 28, -28, -40, 21, -23, -37, 17, -15, -35, 23, -12, -38, 28, -18, -40]
 ];
 
 const matLineasConstelacion = new THREE.LineBasicMaterial({
@@ -155,7 +124,10 @@ const matPuntoConstelacion = new THREE.PointsMaterial({
 });
 
 esquemasConstelaciones.forEach((puntos) => {
-  const puntosVector = puntos.map(p => new THREE.Vector3(p[0], p[1], p[2]));
+  const puntosVector = [];
+  for (let i = 0; i < puntos.length; i += 3) {
+    puntosVector.push(new THREE.Vector3(puntos[i], puntos[i + 1], puntos[i + 2]));
+  }
   const geoLineas = new THREE.BufferGeometry().setFromPoints(puntosVector);
   const lineas = new THREE.Line(geoLineas, matLineasConstelacion);
   grupoConstelaciones.add(lineas);
@@ -166,9 +138,7 @@ esquemasConstelaciones.forEach((puntos) => {
 });
 escena.add(grupoConstelaciones);
 
-// ==================================================
 // 3. POLVO ESTELAR DE FONDO
-// ==================================================
 const geoPolvoEstrellas = new THREE.BufferGeometry();
 const cantPolvo = esMovil ? 450 : 800;
 const posPolvo = new Float32Array(cantPolvo * 3);
@@ -177,7 +147,7 @@ const coloresPolvo = new Float32Array(cantPolvo * 3);
 for (let i = 0; i < cantPolvo; i++) {
   const radio = 42 + Math.random() * 95;
   const theta = Math.random() * Math.PI * 2;
-  const phi = Math.acos((Math.random() * 2) - 1);
+  const phi = Math.acos(Math.random() * 2 - 1);
 
   posPolvo[i * 3] = radio * Math.sin(phi) * Math.cos(theta);
   posPolvo[i * 3 + 1] = radio * Math.sin(phi) * Math.sin(theta);
@@ -185,16 +155,22 @@ for (let i = 0; i < cantPolvo; i++) {
 
   const tono = Math.random();
   if (tono > 0.6) {
-    coloresPolvo[i * 3] = 0.85; coloresPolvo[i * 3 + 1] = 0.9; coloresPolvo[i * 3 + 2] = 1.0;
+    coloresPolvo[i * 3] = 0.85;
+    coloresPolvo[i * 3 + 1] = 0.9;
+    coloresPolvo[i * 3 + 2] = 1.0;
   } else if (tono > 0.3) {
-    coloresPolvo[i * 3] = 1.0; coloresPolvo[i * 3 + 1] = 0.85; coloresPolvo[i * 3 + 2] = 0.95;
+    coloresPolvo[i * 3] = 1.0;
+    coloresPolvo[i * 3 + 1] = 0.85;
+    coloresPolvo[i * 3 + 2] = 0.95;
   } else {
-    coloresPolvo[i * 3] = 0.75; coloresPolvo[i * 3 + 1] = 0.85; coloresPolvo[i * 3 + 2] = 0.95;
+    coloresPolvo[i * 3] = 0.75;
+    coloresPolvo[i * 3 + 1] = 0.85;
+    coloresPolvo[i * 3 + 2] = 0.95;
   }
 }
 
-geoPolvoEstrellas.setAttribute("position", new THREE.BufferAttribute(posPolvo, 3));
-geoPolvoEstrellas.setAttribute("color", new THREE.BufferAttribute(coloresPolvo, 3));
+geoPolvoEstrellas.setAttribute('position', new THREE.BufferAttribute(posPolvo, 3));
+geoPolvoEstrellas.setAttribute('color', new THREE.BufferAttribute(coloresPolvo, 3));
 
 const matPolvo = new THREE.PointsMaterial({
   size: 0.16,
@@ -204,26 +180,24 @@ const matPolvo = new THREE.PointsMaterial({
   blending: THREE.AdditiveBlending,
   depthWrite: false
 });
+
 const polvoEstelar = new THREE.Points(geoPolvoEstrellas, matPolvo);
 escena.add(polvoEstelar);
 
-// ==================================================
 // 4. ROSAS BLANCAS PROCEDURALES EN EL ESPACIO
-// ==================================================
 function crearTexturaRosaBlancaEquilibrada() {
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   canvas.width = 128;
   canvas.height = 128;
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
 
-  ctx.font = "84px 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("🌹", 64, 64);
+  ctx.font = '84px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('🌹', 64, 64);
 
   const imgData = ctx.getImageData(0, 0, 128, 128);
   const data = imgData.data;
-
   for (let i = 0; i < data.length; i += 4) {
     if (data[i + 3] > 15) {
       data[i] = 255;
@@ -234,12 +208,11 @@ function crearTexturaRosaBlancaEquilibrada() {
   }
   ctx.putImageData(imgData, 0, 0);
 
-  const canvasFinal = document.createElement("canvas");
+  const canvasFinal = document.createElement('canvas');
   canvasFinal.width = 128;
   canvasFinal.height = 128;
-  const ctxFinal = canvasFinal.getContext("2d");
-
-  ctxFinal.shadowColor = "#ffffff";
+  const ctxFinal = canvasFinal.getContext('2d');
+  ctxFinal.shadowColor = '#ffffff';
   ctxFinal.shadowBlur = 14;
   ctxFinal.drawImage(canvas, 0, 0);
 
@@ -263,35 +236,28 @@ const numRosas = CONFIG.cantidadEstrellas || (esMovil ? 90 : 150);
 
 for (let i = 0; i < numRosas; i++) {
   const sprite = new THREE.Sprite(materialRosa);
-  
   const radio = 34 + Math.random() * 85;
   const theta = Math.random() * Math.PI * 2;
-  const phi = Math.acos((Math.random() * 2) - 1);
+  const phi = Math.acos(Math.random() * 2 - 1);
 
   sprite.position.x = radio * Math.sin(phi) * Math.cos(theta);
-  sprite.position.y = (radio * Math.sin(phi) * Math.sin(theta)) * 0.72;
+  sprite.position.y = radio * Math.sin(phi) * Math.sin(theta) * 0.72;
   sprite.position.z = radio * Math.cos(phi);
 
   const escala = 1.3 + Math.random() * 1.0;
   sprite.scale.set(escala, escala, 1);
-
-  sprite.userData = {
-    esRosa: true,
-    rotacionVel: (Math.random() - 0.5) * 0.005
-  };
+  sprite.userData = { esRosa: true, rotacionVel: (Math.random() - 0.5) * 0.005 };
 
   grupoRosas.add(sprite);
   rosasArray.push(sprite);
 }
 escena.add(grupoRosas);
 
-// ==================================================
-// 5. SOL Y PLANETAS (CORRECCIÓN DE TRANSPARENCIA Y PROFUNDIDAD)
-// ==================================================
+// 5. SOL Y PLANETAS + BAILARINES EN NEPTUNO
 const cargadorTexturas = new THREE.TextureLoader();
-cargadorTexturas.setCrossOrigin("anonymous");
+cargadorTexturas.setCrossOrigin('anonymous');
 
-// Sol (Esfera sólida que no escribe transparencia)
+// Sol
 const texturaSol = cargadorTexturas.load(CONFIG.sol.textura);
 const sol = new THREE.Mesh(
   new THREE.SphereGeometry(CONFIG.sol.radio, esMovil ? 24 : 32, esMovil ? 24 : 32),
@@ -306,9 +272,9 @@ const sol = new THREE.Mesh(
 sol.userData = { ...CONFIG.sol };
 escena.add(sol);
 
-// Halo de resplandor (depthWrite: false evita que recorte las órbitas por detrás)
+// Halo de resplandor solar
 const matHaloSol = new THREE.SpriteMaterial({
-  map: crearTexturaNebulosaSuave("rgba(255, 175, 50, 0.40)", "rgba(255, 100, 10, 0.05)"),
+  map: crearTexturaNebulosaSuave('rgba(255, 175, 50, 0.40)', 'rgba(255, 100, 10, 0.05)'),
   blending: THREE.AdditiveBlending,
   transparent: true,
   opacity: 0.45,
@@ -320,8 +286,130 @@ haloSol.scale.set(CONFIG.sol.radio * 2.8, CONFIG.sol.radio * 2.8, 1);
 haloSol.renderOrder = 2;
 sol.add(haloSol);
 
+// GENERADOR DE FIGURA 3D ELEGANTE DE PERSONA PARA EL BAILE
+function crearFiguraPersona(esVestido = false, colorPrincipal = 0xd9e8ff) {
+  const persona = new THREE.Group();
+  const matCuerpo = new THREE.MeshStandardMaterial({
+    color: colorPrincipal,
+    roughness: 0.4,
+    metalness: 0.25,
+    emissive: colorPrincipal,
+    emissiveIntensity: 0.2
+  });
+
+  // Cabeza
+  const cabeza = new THREE.Mesh(new THREE.SphereGeometry(0.12, 14, 14), matCuerpo);
+  cabeza.position.y = 0.88;
+  persona.add(cabeza);
+
+  // Cuello
+  const cuello = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.08, 8), matCuerpo);
+  cuello.position.y = 0.74;
+  persona.add(cuello);
+
+  // Torso / Cuerpo
+  if (esVestido) {
+    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.13, 0.32, 10), matCuerpo);
+    torso.position.y = 0.55;
+    persona.add(torso);
+
+    const falda = new THREE.Mesh(new THREE.ConeGeometry(0.24, 0.44, 14, 1, true), matCuerpo);
+    falda.position.y = 0.22;
+    persona.add(falda);
+  } else {
+    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.1, 0.36, 10), matCuerpo);
+    torso.position.y = 0.54;
+    persona.add(torso);
+
+    const piernaIzq = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.035, 0.42, 8), matCuerpo);
+    piernaIzq.position.set(-0.06, 0.16, 0);
+    persona.add(piernaIzq);
+
+    const piernaDer = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.035, 0.42, 8), matCuerpo);
+    piernaDer.position.set(0.06, 0.16, 0);
+    persona.add(piernaDer);
+  }
+
+  // Brazos abrazados
+  const brazoIzq = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.3, 8), matCuerpo);
+  brazoIzq.position.set(-0.14, 0.5, 0.08);
+  brazoIzq.rotation.z = Math.PI * 0.22;
+  brazoIzq.rotation.x = Math.PI * 0.35;
+  persona.add(brazoIzq);
+
+  const brazoDer = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.3, 8), matCuerpo);
+  brazoDer.position.set(0.14, 0.5, 0.08);
+  brazoDer.rotation.z = -Math.PI * 0.22;
+  brazoDer.rotation.x = Math.PI * 0.35;
+  persona.add(brazoDer);
+
+  return persona;
+}
+
+// CONSTRUCTOR DE LA PAREJA BAILANDO EN EL ANILLO DE GRAVEDAD
+function crearParejaBailandoNeptuno(radioAnillo) {
+  const plataformaGravedad = new THREE.Group();
+
+  // Ancla donde se ubica la pareja en el perímetro del anillo de gravedad
+  const grupoBailarines = new THREE.Group();
+  grupoBailarines.position.set(radioAnillo, 0.02, 0);
+
+  // Silueta Persona 1 (Traje espacial elegante azul noche / cian)
+  const persona1 = crearFiguraPersona(false, 0x82b1ff);
+  persona1.position.set(-0.22, 0, 0);
+  persona1.rotation.y = Math.PI * 0.45;
+  grupoBailarines.add(persona1);
+
+  // Silueta Persona 2 (Vestido etéreo rosa / blanco cósmico)
+  const persona2 = crearFiguraPersona(true, 0xffc2d1);
+  persona2.position.set(0.22, 0, 0);
+  persona2.rotation.y = -Math.PI * 0.45;
+  grupoBailarines.add(persona2);
+
+  // Luz cálida tenue e íntima entre la pareja
+  const luzRomance = new THREE.PointLight(0xffb7c5, 1.8, 4.5);
+  luzRomance.position.set(0, 0.65, 0);
+  grupoBailarines.add(luzRomance);
+
+  // Estrellas / partículas de polvo cósmico flotando suavemente alrededor de sus pies
+  const geoParticulas = new THREE.BufferGeometry();
+  const cantP = esMovil ? 24 : 45;
+  const posP = new Float32Array(cantP * 3);
+  for (let i = 0; i < cantP; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const r = 0.2 + Math.random() * 0.55;
+    posP[i * 3] = Math.cos(ang) * r;
+    posP[i * 3 + 1] = Math.random() * 0.7;
+    posP[i * 3 + 2] = Math.sin(ang) * r;
+  }
+  geoParticulas.setAttribute('position', new THREE.BufferAttribute(posP, 3));
+  const matParticulas = new THREE.PointsMaterial({
+    color: 0xffeef4,
+    size: 0.12,
+    transparent: true,
+    opacity: 0.7,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  const chispasBailarines = new THREE.Points(geoParticulas, matParticulas);
+  grupoBailarines.add(chispasBailarines);
+
+  plataformaGravedad.add(grupoBailarines);
+
+  return {
+    plataforma: plataformaGravedad,
+    grupoBailarines,
+    persona1,
+    persona2,
+    chispasBailarines
+  };
+}
+
+let controladoresBailarinesNeptuno = null;
+
 // Planetas
 const planetasMeshes = [];
+
 CONFIG.planetas.forEach((datos) => {
   const texturaPlaneta = cargadorTexturas.load(datos.textura);
   const malla = new THREE.Mesh(
@@ -339,7 +427,7 @@ CONFIG.planetas.forEach((datos) => {
 
   // Anillos de Saturno
   if (datos.tieneAnillo) {
-    const geometriaAnillo = new THREE.RingGeometry(datos.radio + 0.3, datos.radio + 1.2, esMovil ? 36 : 64);
+    const geometriaAnillo = new THREE.RingGeometry(datos.radio * 1.3, datos.radio * 2.3, esMovil ? 36 : 64);
     const materialAnillo = new THREE.MeshBasicMaterial({
       color: 0xe6dac3,
       side: THREE.DoubleSide,
@@ -352,7 +440,47 @@ CONFIG.planetas.forEach((datos) => {
     malla.add(anillo);
   }
 
-  // Guía de Órbita (depthWrite: false y renderOrder 0 evitan que el halo solar la tape)
+  // ANILLO DE GRAVEDAD Y BAILARINES EN NEPTUNO
+  if (datos.tieneAnilloGravedad) {
+    const radioLejano = datos.radio * 3.8; // Posicionado lejos del planeta
+
+    // Disco de gravedad exterior visible y estilizado
+    const geoAnilloGrav = new THREE.RingGeometry(radioLejano - 0.25, radioLejano + 0.25, esMovil ? 48 : 80);
+    const matAnilloGrav = new THREE.MeshBasicMaterial({
+      color: 0x64b5f6,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.42,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const discoGravedad = new THREE.Mesh(geoAnilloGrav, matAnilloGrav);
+    discoGravedad.rotation.x = Math.PI / 2;
+    malla.add(discoGravedad);
+
+    // Borde brillante de resonancia cósmica
+    const geoBordeGrav = new THREE.RingGeometry(radioLejano + 0.22, radioLejano + 0.28, esMovil ? 48 : 80);
+    const matBordeGrav = new THREE.MeshBasicMaterial({
+      color: 0xd1e8ff,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const bordeGravedad = new THREE.Mesh(geoBordeGrav, matBordeGrav);
+    bordeGravedad.rotation.x = Math.PI / 2;
+    malla.add(bordeGravedad);
+
+    // Integración de la pareja bailando fijada al anillo
+    if (datos.tieneBailarines) {
+      const objetoBaile = crearParejaBailandoNeptuno(radioLejano);
+      malla.add(objetoBaile.plataforma);
+      controladoresBailarinesNeptuno = objetoBaile;
+    }
+  }
+
+  // Guía de órbita
   const geometriaOrbita = new THREE.RingGeometry(datos.distancia - 0.065, datos.distancia + 0.065, esMovil ? 64 : 128);
   const materialOrbita = new THREE.MeshBasicMaterial({
     color: 0xc8e0ff,
@@ -369,9 +497,7 @@ CONFIG.planetas.forEach((datos) => {
   escena.add(orbita);
 });
 
-// ==================================================
 // 6. CONTROLES E INTERACCIÓN
-// ==================================================
 const controles = new OrbitControls(camara, renderizador.domElement);
 controles.enableDamping = true;
 controles.dampingFactor = 0.05;
@@ -381,65 +507,64 @@ const raycaster = new THREE.Raycaster();
 const raton = new THREE.Vector2();
 
 // Elementos DOM
-const infoPanel = document.getElementById("info-planeta");
-const tarjetaInner = document.getElementById("tarjeta-inner");
-const infoTitulo = document.getElementById("info-titulo");
-const infoDesc = document.getElementById("info-desc");
-const infoVideo = document.getElementById("info-video");
-const infoMensaje = document.getElementById("info-mensaje");
-const contenedorLetras = document.getElementById("contenedor-letras");
-const lineaLetraActiva = document.getElementById("linea-letra-activa");
-const btnGirarFrente = document.getElementById("btn-girar-frente");
-const btnGirarAtras = document.getElementById("btn-girar-atras");
-const botonesCerrar = document.querySelectorAll(".btn-cerrar-accion");
+const infoPanel = document.getElementById('info-planeta');
+const tarjetaInner = document.getElementById('tarjeta-inner');
+const infoTitulo = document.getElementById('info-titulo');
+const infoDesc = document.getElementById('info-desc');
+const infoVideo = document.getElementById('info-video');
+const infoMensaje = document.getElementById('info-mensaje');
+const contenedorLetras = document.getElementById('contenedor-letras');
+const lineaLetraActiva = document.getElementById('linea-letra-activa');
+const btnGirarFrente = document.getElementById('btn-girar-frente');
+const btnGirarAtras = document.getElementById('btn-girar-atras');
+const botonesCerrar = document.querySelectorAll('.btn-cerrar-accion');
 
-const modalPalabra = document.getElementById("modal-palabra");
-const textoPalabraModal = document.getElementById("texto-palabra-modal");
-const btnCerrarModal = document.getElementById("cerrar-modal-palabra");
-const contenedorFlotantes = document.getElementById("contenedor-palabras-flotantes");
+const modalPalabra = document.getElementById('modal-palabra');
+const textoPalabraModal = document.getElementById('texto-palabra-modal');
+const btnCerrarModal = document.getElementById('cerrar-modal-palabra');
+const contenedorFlotantes = document.getElementById('contenedor-palabras-flotantes');
 
 let indiceLetraActual = -1;
 
 if (btnCerrarModal) {
-  btnCerrarModal.addEventListener("click", () => {
+  btnCerrarModal.addEventListener('click', () => {
     modalPalabra.hidden = true;
   });
 }
 
 if (btnGirarFrente) {
-  btnGirarFrente.addEventListener("click", (e) => {
+  btnGirarFrente.addEventListener('click', (e) => {
     e.stopPropagation();
-    tarjetaInner.classList.add("girada");
+    tarjetaInner.classList.add('girada');
   });
 }
 
 if (btnGirarAtras) {
-  btnGirarAtras.addEventListener("click", (e) => {
+  btnGirarAtras.addEventListener('click', (e) => {
     e.stopPropagation();
-    tarjetaInner.classList.remove("girada");
+    tarjetaInner.classList.remove('girada');
   });
 }
 
 botonesCerrar.forEach((btn) => {
-  btn.addEventListener("pointerdown", (event) => {
+  btn.addEventListener('pointerdown', (event) => {
     event.stopPropagation();
     ocultarTarjeta();
   });
 });
 
 function obtenerPalabraAleatoria() {
-  const lista = CONFIG.palabrasBonitas || ["Amor", "Magia", "Luz", "Sonrisa", "Universo"];
+  const lista = CONFIG.palabrasBonitas || ['Amor', 'Magia', 'Luz', 'Sonrisa', 'Universo'];
   const indice = Math.floor(Math.random() * lista.length);
   return lista[indice];
 }
 
 function mostrarPalabraFlotante(palabra, x, y) {
-  const elemento = document.createElement("div");
-  elemento.className = "palabra-flotante-pop";
+  const elemento = document.createElement('div');
+  elemento.className = 'palabra-flotante-pop';
   elemento.textContent = palabra;
   elemento.style.left = `${x}px`;
   elemento.style.top = `${y}px`;
-
   contenedorFlotantes.appendChild(elemento);
 
   setTimeout(() => {
@@ -451,89 +576,65 @@ function mostrarModalPalabra(palabra) {
   if (textoPalabraModal && modalPalabra) {
     textoPalabraModal.textContent = palabra;
     modalPalabra.hidden = false;
-
-    clearTimeout(window._timeoutPalabra);
-    window._timeoutPalabra = setTimeout(() => {
+    clearTimeout(window.timeoutPalabra);
+    window.timeoutPalabra = setTimeout(() => {
       modalPalabra.hidden = true;
     }, 4500);
   }
 }
 
-// ==================================================
 // 7. PANTALLA COMPLETA
-// ==================================================
-const btnFullscreen = document.getElementById("btn-fullscreen");
+const btnFullscreen = document.getElementById('btn-fullscreen');
 
 function toggleFullscreen() {
   const doc = document;
   const docEl = doc.documentElement;
 
-  const requestFullscreen = docEl.requestFullscreen ||
-                            docEl.webkitRequestFullscreen ||
-                            docEl.mozRequestFullScreen ||
-                            docEl.msRequestFullscreen;
+  const requestFullscreen = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+  const exitFullscreen = doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen;
 
-  const exitFullscreen = doc.exitFullscreen ||
-                         doc.webkitExitFullscreen ||
-                         doc.mozCancelFullScreen ||
-                         doc.msExitFullscreen;
-
-  const fullscreenElement = doc.fullscreenElement ||
-                            doc.webkitFullscreenElement ||
-                            doc.mozFullScreenElement ||
-                            doc.msFullscreenElement;
+  const fullscreenElement = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
 
   if (!fullscreenElement) {
     if (requestFullscreen) {
       requestFullscreen.call(docEl).catch(console.warn);
     }
-  } else {
-    if (exitFullscreen) {
-      exitFullscreen.call(doc).catch(console.warn);
-    }
+  } else if (exitFullscreen) {
+    exitFullscreen.call(doc).catch(console.warn);
   }
 }
 
 function actualizarIconoFullscreen() {
-  const fullscreenElement = document.fullscreenElement ||
-                            document.webkitFullscreenElement ||
-                            document.mozFullScreenElement ||
-                            document.msFullscreenElement;
-
+  const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
   if (btnFullscreen) {
-    btnFullscreen.innerHTML = fullscreenElement ? "<span>✕</span>" : "<span>⛶</span>";
+    btnFullscreen.innerHTML = fullscreenElement ? '<span>⛶</span>' : '<span>⛶</span>';
   }
 }
 
 if (btnFullscreen) {
-  btnFullscreen.addEventListener("click", (e) => {
+  btnFullscreen.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleFullscreen();
   });
 }
 
-document.addEventListener("fullscreenchange", actualizarIconoFullscreen);
-document.addEventListener("webkitfullscreenchange", actualizarIconoFullscreen);
-document.addEventListener("mozfullscreenchange", actualizarIconoFullscreen);
-document.addEventListener("MSFullscreenChange", actualizarIconoFullscreen);
+document.addEventListener('fullscreenchange', actualizarIconoFullscreen);
+document.addEventListener('webkitfullscreenchange', actualizarIconoFullscreen);
+document.addEventListener('mozfullscreenchange', actualizarIconoFullscreen);
+document.addEventListener('MSFullscreenChange', actualizarIconoFullscreen);
 
-// ==================================================
 // 8. REPRODUCTOR MUSICAL SIN REPETIR
-// ==================================================
 const audioFondo = new Audio();
-audioFondo.preload = "auto";
+audioFondo.preload = 'auto';
 
-const panelMusica = document.getElementById("reproductor-musica");
-const musicaTitulo = document.getElementById("musica-titulo");
-const musicaArtista = document.getElementById("musica-artista");
-const btnMusicaPlay = document.getElementById("btn-musica-play");
-const btnMusicaPrev = document.getElementById("btn-musica-prev");
-const btnMusicaNext = document.getElementById("btn-musica-next");
+const panelMusica = document.getElementById('reproductor-musica');
+const musicaTitulo = document.getElementById('musica-titulo');
+const musicaArtista = document.getElementById('musica-artista');
+const btnMusicaPlay = document.getElementById('btn-musica-play');
+const btnMusicaPrev = document.getElementById('btn-musica-prev');
+const btnMusicaNext = document.getElementById('btn-musica-next');
 
-const listaCanciones = CONFIG.canciones && CONFIG.canciones.length > 0
-  ? CONFIG.canciones
-  : [{ titulo: "Love Story", artista: "Indila", ruta: "./assets/Indila - Love Story.mp3" }];
-
+const listaCanciones = CONFIG.canciones && CONFIG.canciones.length > 0 ? CONFIG.canciones : [{ titulo: 'Love Story', artista: 'Indila', ruta: './assets/Indila - Love Story.mp3' }];
 let ordenReproduccion = [];
 let indiceOrdenActual = 0;
 let pausadoPorVideo = false;
@@ -549,7 +650,6 @@ function barajarCanciones() {
 
 function cargarCancion(indiceEnOrden, reproducirInmediatamente = false) {
   if (listaCanciones.length === 0) return;
-
   const indiceCancion = ordenReproduccion[indiceEnOrden];
   const cancion = listaCanciones[indiceCancion];
 
@@ -559,7 +659,7 @@ function cargarCancion(indiceEnOrden, reproducirInmediatamente = false) {
   audioFondo.load();
 
   if (reproducirInmediatamente) {
-    audioFondo.play().catch(() => {});
+    audioFondo.play().catch(console.warn);
   }
 }
 
@@ -582,7 +682,7 @@ function anteriorCancion() {
 barajarCanciones();
 cargarCancion(0, false);
 
-btnMusicaPlay.addEventListener("click", (e) => {
+btnMusicaPlay.addEventListener('click', (e) => {
   e.stopPropagation();
   if (audioFondo.paused) {
     pausadoPorVideo = false;
@@ -592,34 +692,32 @@ btnMusicaPlay.addEventListener("click", (e) => {
   }
 });
 
-btnMusicaNext.addEventListener("click", (e) => {
+btnMusicaNext.addEventListener('click', (e) => {
   e.stopPropagation();
   siguienteCancion();
 });
 
-btnMusicaPrev.addEventListener("click", (e) => {
+btnMusicaPrev.addEventListener('click', (e) => {
   e.stopPropagation();
   anteriorCancion();
 });
 
-audioFondo.addEventListener("play", () => {
-  panelMusica.classList.add("reproduciendo");
-  btnMusicaPlay.textContent = "⏸";
+audioFondo.addEventListener('play', () => {
+  panelMusica.classList.add('reproduciendo');
+  btnMusicaPlay.textContent = '⏸';
 });
 
-audioFondo.addEventListener("pause", () => {
-  panelMusica.classList.remove("reproduciendo");
-  btnMusicaPlay.textContent = "►";
+audioFondo.addEventListener('pause', () => {
+  panelMusica.classList.remove('reproduciendo');
+  btnMusicaPlay.textContent = '▶';
 });
 
-audioFondo.addEventListener("ended", () => {
+audioFondo.addEventListener('ended', () => {
   siguienteCancion();
-  audioFondo.play().catch(() => {});
+  audioFondo.play().catch(console.warn);
 });
 
-// ==================================================
 // 9. PILARES DE ROSAS ROJAS 3D GIRATORIAS
-// ==================================================
 function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return null;
@@ -644,51 +742,24 @@ function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
   const grupoRosa3D = new THREE.Group();
 
   const geoCentro = new THREE.SphereGeometry(0.5, 16, 16);
-  const matCentro = new THREE.MeshStandardMaterial({
-    color: 0x8a031e,
-    roughness: 0.3,
-    metalness: 0.15
-  });
+  const matCentro = new THREE.MeshStandardMaterial({ color: 0x8a031e, roughness: 0.3, metalness: 0.15 });
   const centroRosa = new THREE.Mesh(geoCentro, matCentro);
   centroRosa.position.y = 0.5;
   grupoRosa3D.add(centroRosa);
 
-  const matPetalosInternos = new THREE.MeshStandardMaterial({
-    color: 0xc9184a,
-    roughness: 0.35,
-    metalness: 0.1,
-    side: THREE.DoubleSide
-  });
-
-  const matPetalosExternos = new THREE.MeshStandardMaterial({
-    color: 0xe63946,
-    roughness: 0.4,
-    metalness: 0.08,
-    side: THREE.DoubleSide
-  });
+  const matPetalosInternos = new THREE.MeshStandardMaterial({ color: 0xc9184a, roughness: 0.35, metalness: 0.1, side: THREE.DoubleSide });
+  const matPetalosExternos = new THREE.MeshStandardMaterial({ color: 0xe63946, roughness: 0.4, metalness: 0.08, side: THREE.DoubleSide });
 
   const numCapas = esMovil ? 12 : 16;
   for (let i = 0; i < numCapas; i++) {
     const radioCapa = 0.55 + i * 0.08;
     const angulo = i * 2.399;
-    const geoPetalo = new THREE.SphereGeometry(
-      0.6 + i * 0.04,
-      12,
-      12,
-      0,
-      Math.PI * 0.75,
-      0,
-      Math.PI * 0.65
-    );
-
-    const matActual = i < (numCapas / 2) ? matPetalosInternos : matPetalosExternos;
+    const geoPetalo = new THREE.SphereGeometry(0.6 + i * 0.04, 12, 12, 0, Math.PI * 0.75, 0, Math.PI * 0.65);
+    const matActual = i < numCapas / 2 ? matPetalosInternos : matPetalosExternos;
     const petalo = new THREE.Mesh(geoPetalo, matActual);
-    petalo.position.set(
-      Math.cos(angulo) * radioCapa * 0.45,
-      0.5 + (i * 0.035) - 0.2,
-      Math.sin(angulo) * radioCapa * 0.45
-    );
-    petalo.rotation.x = Math.PI * 0.22 + (i * 0.03);
+
+    petalo.position.set(Math.cos(angulo) * radioCapa * 0.45, 0.5 + i * 0.035 - 0.2, Math.sin(angulo) * radioCapa * 0.45);
+    petalo.rotation.x = Math.PI * 0.22 + i * 0.03;
     petalo.rotation.y = angulo;
     petalo.rotation.z = Math.sin(i) * 0.22;
     grupoRosa3D.add(petalo);
@@ -702,7 +773,6 @@ function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
 
   const geoHoja = new THREE.ConeGeometry(0.35, 1.1, 10);
   const matHoja = new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.5 });
-  
   const hoja1 = new THREE.Mesh(geoHoja, matHoja);
   hoja1.position.set(0.42, -0.9, 0);
   hoja1.rotation.z = -Math.PI * 0.35;
@@ -737,24 +807,20 @@ function crearEscenaPilarRosa(canvasId, colorLuzPilar) {
   };
 }
 
-const pilarIzq = !esMovil ? crearEscenaPilarRosa("canvas-rosa-izq", 0xff758f) : null;
-const pilarDer = !esMovil ? crearEscenaPilarRosa("canvas-rosa-der", 0xff4d6d) : null;
+const pilarIzq = !esMovil ? crearEscenaPilarRosa('canvas-rosa-izq', 0xff758f) : null;
+const pilarDer = !esMovil ? crearEscenaPilarRosa('canvas-rosa-der', 0xff4d6d) : null;
 
-// ==================================================
-// 10. ANIMACIÓN CINEMATOGRÁFICA DE ESCAPE (INICIO)
-// ==================================================
-const pantallaInicio = document.getElementById("pantalla-inicio");
-const btnComenzarViaje = document.getElementById("btn-comenzar-viaje");
+// 10. ANIMACIÓN CINEMATOGRÁFICA DE ENTRADA
+const pantallaInicio = document.getElementById('pantalla-inicio');
+const btnComenzarViaje = document.getElementById('btn-comenzar-viaje');
 
 if (btnComenzarViaje && pantallaInicio) {
-  btnComenzarViaje.addEventListener("click", (e) => {
+  btnComenzarViaje.addEventListener('click', (e) => {
     e.stopPropagation();
-
     if (audioFondo.paused) {
       audioFondo.play().catch(console.warn);
     }
-
-    pantallaInicio.classList.add("animando-salida");
+    pantallaInicio.classList.add('animando-salida');
 
     const duracion = 2500;
     const tiempoInicio = performance.now();
@@ -766,10 +832,7 @@ if (btnComenzarViaje && pantallaInicio) {
     function animarVueloEntrada(tiempoActual) {
       const transcurrido = tiempoActual - tiempoInicio;
       const progreso = Math.min(transcurrido / duracion, 1);
-      
-      const ease = progreso < 0.5
-        ? 4 * progreso * progreso * progreso
-        : 1 - Math.pow(-2 * progreso + 2, 3) / 2;
+      const ease = progreso < 0.5 ? 4 * progreso * progreso * progreso : 1 - Math.pow(-2 * progreso + 2, 3) / 2;
 
       camara.position.z = posInicialZ + (posFinalZ - posInicialZ) * ease;
       camara.position.y = posInicialY + (posFinalY - posInicialY) * ease;
@@ -777,7 +840,7 @@ if (btnComenzarViaje && pantallaInicio) {
       if (progreso < 1) {
         requestAnimationFrame(animarVueloEntrada);
       } else {
-        pantallaInicio.classList.add("oculta");
+        pantallaInicio.classList.add('oculta');
       }
     }
 
@@ -785,15 +848,15 @@ if (btnComenzarViaje && pantallaInicio) {
   });
 }
 
-// ==================================================
 // 11. POINTER EVENTS EN LA ESCENA PRINCIPAL
-// ==================================================
-window.addEventListener("pointerdown", (event) => {
+window.addEventListener('pointerdown', (event) => {
+  if (pantallaInicio && !pantallaInicio.classList.contains('animando-salida') && !pantallaInicio.classList.contains('oculta')) {
+    return;
+  }
   if (
-    (pantallaInicio && !pantallaInicio.classList.contains("animando-salida") && !pantallaInicio.classList.contains("oculta")) ||
-    infoPanel.contains(event.target) ||
+    (infoPanel && infoPanel.contains(event.target)) ||
     (modalPalabra && modalPalabra.contains(event.target)) ||
-    panelMusica.contains(event.target) ||
+    (panelMusica && panelMusica.contains(event.target)) ||
     (btnFullscreen && btnFullscreen.contains(event.target))
   ) {
     return;
@@ -816,7 +879,6 @@ window.addEventListener("pointerdown", (event) => {
   const interRosas = raycaster.intersectObjects(rosasArray, false);
   if (interRosas.length > 0) {
     const rosaClickeada = interRosas[0].object;
-    
     const escalaOriginal = rosaClickeada.scale.x;
     rosaClickeada.scale.set(escalaOriginal * 1.6, escalaOriginal * 1.6, 1);
     setTimeout(() => {
@@ -829,7 +891,7 @@ window.addEventListener("pointerdown", (event) => {
   }
 });
 
-window.addEventListener("resize", () => {
+window.addEventListener('resize', () => {
   camara.aspect = window.innerWidth / window.innerHeight;
   camara.updateProjectionMatrix();
   renderizador.setSize(window.innerWidth, window.innerHeight);
@@ -838,27 +900,49 @@ window.addEventListener("resize", () => {
   if (pilarDer) pilarDer.resize();
 });
 
-// ==================================================
 // 12. BUCLE DE ANIMACIÓN
-// ==================================================
 function animar(tiempo) {
   const t = tiempo * 0.001;
 
   sol.rotation.y += 0.002;
 
+  // Actualización de órbitas de planetas
   planetasMeshes.forEach((malla) => {
     const datos = malla.userData;
+    // Movimiento orbital a su respectiva velocidad y distancia
     malla.position.x = Math.cos(t * datos.velocidad) * datos.distancia;
     malla.position.z = Math.sin(t * datos.velocidad) * datos.distancia;
     malla.rotation.y += 0.015;
   });
+
+  // ANIMACIÓN DE BAILE LENTO EN NEPTUNO
+  if (controladoresBailarinesNeptuno) {
+    const { grupoBailarines, persona1, persona2, chispasBailarines } = controladoresBailarinesNeptuno;
+
+    // Ritmo de vals lento (slow dance)
+    const ritmoBaile = t * 1.25;
+    const vaiven = Math.sin(ritmoBaile);
+    const balanceo = Math.cos(ritmoBaile);
+
+    // Movimiento suave de la pareja unida
+    grupoBailarines.rotation.y = balanceo * 0.35;
+    grupoBailarines.rotation.z = vaiven * 0.07;
+    grupoBailarines.position.y = 0.02 + Math.abs(vaiven) * 0.04;
+
+    // Inclinación mutua al ritmo de la melodía
+    persona1.rotation.z = vaiven * 0.08;
+    persona2.rotation.z = -vaiven * 0.08;
+
+    // Chispas de polvo estelar cósmico
+    chispasBailarines.rotation.y += 0.01;
+  }
 
   grupoNebulosas.rotation.y = t * 0.0025;
   grupoConstelaciones.rotation.y = -t * 0.0015;
   polvoEstelar.rotation.y = -t * 0.002;
   grupoRosas.rotation.y = t * 0.01;
 
-  if (pantallaInicio && !pantallaInicio.classList.contains("oculta")) {
+  if (pantallaInicio && !pantallaInicio.classList.contains('oculta')) {
     if (pilarIzq) pilarIzq.render();
     if (pilarDer) pilarDer.render();
   }
@@ -869,65 +953,63 @@ function animar(tiempo) {
 
 renderizador.setAnimationLoop(animar);
 
-// ==================================================
 // 13. TARJETA DE PLANETAS Y SINCRONIZACIÓN DE LETRAS
-// ==================================================
 function mostrarTarjeta(datosPlaneta) {
-  tarjetaInner.classList.remove("girada");
+  tarjetaInner.classList.remove('girada');
 
   infoTitulo.textContent = datosPlaneta.nombre;
   infoDesc.textContent = datosPlaneta.info;
-  infoMensaje.textContent = datosPlaneta.mensajeReverso || "Un rincón especial en el cosmos.";
+  infoMensaje.textContent = datosPlaneta.mensajeReverso || 'Un rincón especial en el cosmos.';
 
-  const colorHex = datosPlaneta.colorTema || "#e7a9b5";
-  infoPanel.style.setProperty("--color-planeta", colorHex);
+  const colorHex = datosPlaneta.colorTema || '#e7a9b5';
+  infoPanel.style.setProperty('--color-planeta', colorHex);
 
-  const videoAnterior = infoVideo.querySelector("video");
+  const videoAnterior = infoVideo.querySelector('video');
   if (videoAnterior) {
     videoAnterior.pause();
-    videoAnterior.removeAttribute("src");
+    videoAnterior.removeAttribute('src');
     videoAnterior.load();
   }
-  infoVideo.innerHTML = "";
+  infoVideo.innerHTML = '';
   indiceLetraActual = -1;
 
   if (datosPlaneta.video) {
-    const video = document.createElement("video");
+    const video = document.createElement('video');
     video.src = datosPlaneta.video;
     video.controls = true;
-    video.preload = "metadata";
+    video.preload = 'metadata';
     video.playsInline = true;
-    video.setAttribute("controlsList", "nodownload nofullscreen noremoteplayback");
-    video.setAttribute("playsinline", "");
-    video.setAttribute("webkit-playsinline", "");
+    video.setAttribute('controlsList', 'nodownload nofullscreen noremoteplayback');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
 
-    video.addEventListener("play", () => {
+    video.addEventListener('play', () => {
       if (!audioFondo.paused) {
         pausadoPorVideo = true;
         audioFondo.pause();
       }
     });
 
-    video.addEventListener("pause", () => {
+    video.addEventListener('pause', () => {
       if (pausadoPorVideo) {
         pausadoPorVideo = false;
-        audioFondo.play().catch(() => {});
+        audioFondo.play().catch(console.warn);
       }
     });
 
-    video.addEventListener("ended", () => {
+    video.addEventListener('ended', () => {
       if (pausadoPorVideo) {
         pausadoPorVideo = false;
-        audioFondo.play().catch(() => {});
+        audioFondo.play().catch(console.warn);
       }
     });
 
     // Sincronización de letras estilo Spotify
     if (datosPlaneta.letras && datosPlaneta.letras.length > 0 && contenedorLetras && lineaLetraActiva) {
-      contenedorLetras.removeAttribute("hidden");
-      lineaLetraActiva.textContent = "...";
+      contenedorLetras.removeAttribute('hidden');
+      lineaLetraActiva.textContent = '...';
 
-      video.addEventListener("timeupdate", () => {
+      video.addEventListener('timeupdate', () => {
         const tiempoActual = video.currentTime;
         let nuevoIndice = -1;
 
@@ -941,46 +1023,52 @@ function mostrarTarjeta(datosPlaneta) {
 
         if (nuevoIndice !== indiceLetraActual) {
           indiceLetraActual = nuevoIndice;
-          lineaLetraActiva.classList.add("cambiando");
+          lineaLetraActiva.classList.add('cambiando');
           setTimeout(() => {
-            lineaLetraActiva.textContent = nuevoIndice >= 0 ? datosPlaneta.letras[nuevoIndice].text : "...";
-            lineaLetraActiva.classList.remove("cambiando");
+            lineaLetraActiva.textContent = nuevoIndice >= 0 ? datosPlaneta.letras[nuevoIndice].text : '...';
+            lineaLetraActiva.classList.remove('cambiando');
           }, 120);
         }
       });
 
-      video.addEventListener("seeked", () => {
+      video.addEventListener('seeked', () => {
         indiceLetraActual = -1;
       });
     } else if (contenedorLetras) {
-      contenedorLetras.setAttribute("hidden", "");
+      contenedorLetras.setAttribute('hidden', '');
     }
 
     infoVideo.appendChild(video);
     infoVideo.hidden = false;
   } else {
     infoVideo.hidden = true;
-    if (contenedorLetras) contenedorLetras.setAttribute("hidden", "");
+    if (contenedorLetras) {
+      contenedorLetras.setAttribute('hidden', '');
+    }
   }
 
   infoPanel.hidden = false;
 }
 
 function ocultarTarjeta() {
-  const videoActivo = infoVideo.querySelector("video");
+  const videoActivo = infoVideo.querySelector('video');
   if (videoActivo) {
     videoActivo.pause();
-    videoActivo.removeAttribute("src");
+    videoActivo.removeAttribute('src');
     videoActivo.load();
   }
-  infoVideo.innerHTML = "";
+  infoVideo.innerHTML = '';
   infoVideo.hidden = true;
   infoPanel.hidden = true;
-  if (contenedorLetras) contenedorLetras.setAttribute("hidden", "");
-  tarjetaInner.classList.remove("girada");
+
+  if (contenedorLetras) {
+    contenedorLetras.setAttribute('hidden', '');
+  }
+
+  tarjetaInner.classList.remove('girada');
 
   if (pausadoPorVideo) {
     pausadoPorVideo = false;
-    audioFondo.play().catch(() => {});
+    audioFondo.play().catch(console.warn);
   }
 }
